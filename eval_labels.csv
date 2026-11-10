@@ -1,0 +1,31 @@
+contact_id,stage,expected_pain_points
+C01,first_touch,
+C02,follow_up,undetected weekend leaks; nine days of tool downtime; manual Friday sub-fab checks
+C03,first_touch,
+C04,follow_up,water from roof drains and condensate reaching tools; partial insurance coverage; wants early warnings
+C05,first_touch,
+C06,follow_up,manual log exports from three systems; excursions found hours late; HVAC filter changes cause spikes
+C07,first_touch,
+C08,follow_up,particle counts not linked to room events; week-long root-cause reviews; data in separate tools
+C09,first_touch,
+C10,first_touch,
+C11,follow_up,200+ student users break gowning protocol; contamination hard to trace; reduced monitoring budget
+C12,first_touch,
+C13,first_touch,
+C14,follow_up,
+C15,first_touch,
+C16,follow_up,two days of manual audit prep; missing data caused two audit findings; needs trustworthy reports
+C17,first_touch,
+C18,follow_up,handwritten deviation reports; disputes over excursion start time; mismatched timestamps
+C19,first_touch,
+C20,first_touch,
+C21,follow_up,reactive maintenance; no warning before pump or chiller failure; ten-day spare part lead times
+C22,first_touch,
+C23,follow_up,tool health tracked in a personal spreadsheet; single point of failure; pump failure scrapped a wafer lot
+C24,first_touch,
+C25,first_touch,
+C26,follow_up,paper logging then retyping; unclear who reviews readings
+C27,first_touch,
+C28,first_touch,
+C29,follow_up,contamination discovered only after results; experiments ruined twice
+C30,first_touch,

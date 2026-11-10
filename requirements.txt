@@ -1,0 +1,8 @@
+streamlit>=1.40
+anthropic>=0.40
+openai>=1.40
+pandas>=2.0
+openpyxl>=3.1
+arize-phoenix-otel>=0.6
+openinference-instrumentation-anthropic>=0.1
+openinference-instrumentation-openai>=0.1

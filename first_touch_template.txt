@@ -1,0 +1,10 @@
+Subject: Student research on {topic}
+
+Hi {name},
+
+I'm a graduate student at RIT researching {topic}. Given your work as {role}, I'd value your perspective on how this shows up day to day.
+
+Would you be open to a 15-minute call in the next two weeks? I'm only here to learn, not to sell anything.
+
+Thank you,
+{sender}

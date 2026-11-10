@@ -1,10 +1,13 @@
-Subject: Student research on {topic}
+Subject: Student research on Cleanroom Operations
 
-Hi {name},
+Hi,
 
-I'm a graduate student at RIT researching {topic}. Given your work as {role}, I'd value your perspective on how this shows up day to day.
+I am Niharika, a graduate student at Rochester Institute of Technology. I'm conducting research on cleanroom management practices across the industry. I'm interested in understanding the day-to-day challenges around contamination monitoring and  compliance documentation. 
 
-Would you be open to a 15-minute call in the next two weeks? I'm only here to learn, not to sell anything.
+ A 15-minute conversation would help me understand what's working and where the biggest friction points are. 
 
-Thank you,
-{sender}
+Would you be available for a Zoom meeting this week or next week?
+
+Looking forward to hearing from you.
+
+Thanks,

@@ -108,10 +108,13 @@ REAL_ORG = {
 }
 
 # Optional context for follow-ups: who had the call, and where. Empty = "Thank you again for speaking with me."
-MET = {
-    "Marco Ibarra": ("Sam, my research partner,", "ALD 2026 in Tampa"),
-    "Kevin Mbeki": ("", "the SEMICON West career fair"),
-    "Dr. Elise Fournier": ("Sam, my research partner,", ""),
+MET = {  # name -> (mode of contact, met_by, met_at). Not listed = phone call with the sender.
+    "Marco Ibarra": ("in person", "John Doe, my research partner,", "ALD 2026 in Tampa"),
+    "Kevin Mbeki": ("in person", "", "the SEMICON West career fair"),
+    "Dr. Elise Fournier": ("phone call", "John Doe, my research partner,", ""),
+    "Michael Tanaka": ("email", "", ""),
+    "Victor Santos": ("email", "", ""),
+    "Zoe Adeyemi": ("in person", "", "ALD 2026 in Tampa"),
 }
 
 
@@ -125,13 +128,13 @@ def main() -> None:
     DATA.mkdir(exist_ok=True)
     with open(DATA / "contacts_sample.csv", "w", newline="") as f:
         w = csv.writer(f)
-        w.writerow(["contact_id", "name", "role", "org", "seniority", "email", "call_notes", "met_by", "met_at"])
+        w.writerow(["contact_id", "name", "role", "org", "seniority", "email", "call_notes", "contact_mode", "met_by", "met_at"])
         for i, row in enumerate(CONTACTS, start=1):
             name, role, org, seniority, _, notes = row[:6]
             if not notes.strip():
                 org = REAL_ORG.get(org, org)
-            met_by, met_at = MET.get(name, ("", ""))
-            w.writerow([f"C{i:02d}", name, role, org, seniority, email_for(name, org), notes, met_by, met_at])
+            mode, met_by, met_at = MET.get(name, ("phone call" if notes.strip() else "", "", ""))
+            w.writerow([f"C{i:02d}", name, role, org, seniority, email_for(name, org), notes, mode, met_by, met_at])
 
     with open(DATA / "eval_labels.csv", "w", newline="") as f:
         w = csv.writer(f)

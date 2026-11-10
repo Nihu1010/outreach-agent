@@ -41,7 +41,7 @@ ss.setdefault("log", [])
 # ---------- Sidebar ----------
 with st.sidebar:
     st.header("Settings")
-    sender = st.text_input("Your name (signs the email)", "Alex Student")
+    sender = st.text_input("Your name (signs the email)", "Niharika Mahesh Ahirekar")
     topic = st.text_input("Research topic (first-touch template)", "cleanroom contamination and equipment risk")
     if not os.getenv(KEY_NAME):
         key = st.text_input(f"{KEY_LABEL} API key", type="password", help="Not stored. Needed for follow-up drafts only.")

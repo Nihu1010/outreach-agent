@@ -14,7 +14,8 @@ from tracing import span
 
 TEMPLATE_PATH = Path(__file__).parent / "data" / "first_touch_template.txt"
 MIN_NOTE_WORDS = 12  # below this, notes are too thin to ground a follow-up
-FOLLOWUP_SUBJECT = "Following up on our conversation"
+FOLLOWUP_SUBJECT = "Following up on our conversation"  # edit to your approved subject line
+
 
 PROVIDERS = {  # name -> (API key env var, model env var, default model)
     "groq": ("GROQ_API_KEY", "GROQ_MODEL", "openai/gpt-oss-120b"),
@@ -127,9 +128,8 @@ Rules:
 - Use only facts in the quotes provided. Keep time words exactly as quoted (e.g. "over a weekend", "last spring"). Do not exaggerate or generalize ("for days", "recently", "often" are not allowed unless quoted).
 - You are a researcher learning, not a vendor. Never offer help, solutions or products. Never write "we can help" or similar.
 - Professional, warm, plain English. No exclamation marks.
-- Subject: short and professional, e.g. "Thank you for your time, <first name>".
 - The three parts together: under 110 words.
-Return JSON: {"subject": "...", "thanks": "...", "detail": "...", "ask": "..."}"""
+Return JSON: {"thanks": "...", "detail": "...", "ask": "..."}"""
 
 
 def greeting_name(name: str) -> str:
@@ -144,7 +144,7 @@ def draft_followup(name: str, role: str, org: str, pain_points: list[dict], send
     parts = [out.get(k, "").strip() for k in ("thanks", "detail", "ask")]
     # Code, not the model, owns the email layout: greeting, one blank line between paragraphs, sign-off.
     body = f"Hi {greeting_name(name)},\n\n" + "\n\n".join(p for p in parts if p) + f"\n\nBest regards,\n{sender}"
-    return out.get("subject", "").strip(), body
+    return FOLLOWUP_SUBJECT, body
 
 
 # ---------- Orchestration ----------

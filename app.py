@@ -67,12 +67,15 @@ def load_sheet(file) -> pd.DataFrame | None:
         df = pd.read_excel(file)
     else:
         df = pd.read_csv(file)
-    df.columns = [str(c).strip().lower().replace(" ", "_") for c in df.columns]
+    df.columns = [str(c).strip().lower().replace(" ", "_").replace("-", "_") for c in df.columns]
+    aliases = {"mode_of_contact": "contact_mode", "mode": "contact_mode", "contact_method": "contact_mode",
+               "how_we_met": "contact_mode", "event": "met_at"}
+    df = df.rename(columns={c: aliases[c] for c in df.columns if c in aliases and aliases[c] not in df.columns})
     missing = [c for c in REQUIRED if c not in df.columns]
     if missing:
         st.error(f"Your sheet needs a name, role and org column. Missing: {', '.join(missing)}.")
         return None
-    for col in ("contact_id", "email", "seniority", "call_notes", "met_by", "met_at"):
+    for col in ("contact_id", "email", "seniority", "call_notes", "contact_mode", "met_by", "met_at"):
         if col not in df.columns:
             df[col] = ""
     df = df.fillna("")
@@ -81,7 +84,7 @@ def load_sheet(file) -> pd.DataFrame | None:
 
 
 upload = st.file_uploader("Contact sheet (.xlsx or .csv)", type=["xlsx", "xls", "csv"],
-                          help="Columns: name, role, org (required); email, seniority, call_notes, met_by, met_at (optional). "
+                          help="Columns: name, role, org (required); email, seniority, call_notes, mode of contact (email / phone call / in person), met_by, met_at (optional). "
                                "Leave empty to use the 30-contact synthetic sample.")
 df = load_sheet(upload)
 if df is None:

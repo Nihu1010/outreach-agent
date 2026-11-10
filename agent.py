@@ -203,13 +203,40 @@ def greeting_name(name: str) -> str:
     return f"Dr. {name.split()[-1]}" if name.startswith("Dr.") else name.split()[0]
 
 
-def meeting_context(met_by: str, met_at: str) -> str:
-    """Builds the 'where we met' sentence from optional sheet columns; never written by the AI."""
+def contact_mode(raw: str) -> str:
+    """Maps the sheet's mode-of-contact value to email | phone | in_person | unknown."""
+    v = (raw or "").lower()
+    if "mail" in v:
+        return "email"
+    if "phone" in v or "call" in v or "zoom" in v:
+        return "phone"
+    if "person" in v or "conference" in v or "event" in v or "fair" in v or "met" in v:
+        return "in_person"
+    return "unknown"
+
+
+def meeting_context(mode_raw: str, met_by: str, met_at: str) -> str:
+    """The 'how we were in touch' sentence. Built by code from the sheet, never written by the AI.
+    mode_raw: the sheet's mode of contact (email / phone call / in person at <event>)
+    met_by:   who spoke with them if it wasn't the sender, e.g. 'Nitish, my research partner,'
+    met_at:   the event name, e.g. 'ALD 2026 in Tampa' (only used for in-person)"""
+    mode = contact_mode(mode_raw)
     met_by, met_at = (met_by or "").strip(), (met_at or "").strip()
+    if mode == "in_person" and not met_at and " at " in (mode_raw or ""):
+        met_at = mode_raw.split(" at ", 1)[1].strip()  # "in person at ALD 2026 in Tampa"
     where = f" at {met_at}" if met_at else ""
-    if met_by:
-        return f"{met_by} told me about the conversation you two had{where}."
-    return f"Thank you again for speaking with me{where}."
+
+    if mode == "email":
+        return (f"{met_by} shared the email exchange you two had." if met_by
+                else "Thank you again for taking the time to reply to my email.")
+    if mode == "phone":
+        return (f"{met_by} told me about the call you two had." if met_by
+                else "Thank you again for taking the time to speak with me over the phone.")
+    if mode == "in_person":
+        return (f"{met_by} told me about the conversation you two had{where}." if met_by
+                else f"It was great meeting you{where or ' in person'}.")
+    return (f"{met_by} told me about the conversation you two had." if met_by
+            else "Thank you again for speaking with me.")
 
 
 def draft_followup(contact: dict, pain_points: list[dict], sender: str) -> tuple[str, str]:
@@ -222,7 +249,7 @@ def draft_followup(contact: dict, pain_points: list[dict], sender: str) -> tuple
         name=greeting_name(contact["name"]),
         sender_first=sender.split()[0],
         sender=sender,
-        context=meeting_context(contact.get("met_by", ""), contact.get("met_at", "")),
+        context=meeting_context(contact.get("contact_mode", ""), contact.get("met_by", ""), contact.get("met_at", "")),
         insight=insight,
     )
     first_line, _, rest = text.partition("\n")

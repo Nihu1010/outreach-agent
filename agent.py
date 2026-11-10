@@ -17,7 +17,7 @@ MIN_NOTE_WORDS = 12  # below this, notes are too thin to ground a follow-up
 
 
 PROVIDERS = {  # name -> (API key env var, model env var, default model)
-    "groq": ("GROQ_API_KEY", "GROQ_MODEL", "llama-3.3-70b-versatile"),
+    "groq": ("GROQ_API_KEY", "GROQ_MODEL", "openai/gpt-oss-120b"),
     "anthropic": ("ANTHROPIC_API_KEY", "ANTHROPIC_MODEL", "claude-haiku-5-5"),
     "openai": ("OPENAI_API_KEY", "OPENAI_MODEL", "gpt-4o-mini"),
 }
@@ -54,10 +54,16 @@ def llm_json(system: str, user: str, temperature: float) -> dict:
             _clients[p] = Anthropic()  # reads ANTHROPIC_API_KEY
     c = _clients[p]
     if p in ("groq", "openai"):
-        resp = c.chat.completions.create(
-            model=model(), temperature=temperature, response_format={"type": "json_object"},
-            messages=[{"role": "system", "content": system}, {"role": "user", "content": user}])
-        text = resp.choices[0].message.content
+        msgs = [{"role": "system", "content": system}, {"role": "user", "content": user}]
+        try:
+            resp = c.chat.completions.create(model=model(), temperature=temperature,
+                                             response_format={"type": "json_object"}, messages=msgs)
+        except Exception as e:
+            if "model" in str(e).lower() and ("not found" in str(e).lower() or "decommission" in str(e).lower()):
+                raise  # wrong model name: retrying won't help, surface it
+            # Some models reject JSON mode; retry once without it (the prompt still asks for JSON).
+            resp = c.chat.completions.create(model=model(), temperature=temperature, messages=msgs)
+        text = resp.choices[0].message.content or ""
     else:
         resp = c.messages.create(
             model=model(), max_tokens=800, temperature=temperature,
@@ -87,8 +93,7 @@ def route(call_notes: str) -> str:
 # ---------- Tool 1: template fill (no AI) ----------
 
 def fill_template(name: str, role: str, topic: str, sender: str) -> tuple[str, str]:
-    greet = f"Dr. {name.split()[-1]}" if name.startswith("Dr.") else name.split()[0]
-    text = TEMPLATE_PATH.read_text().format(name=greet, role=role, topic=topic, sender=sender)
+    text = TEMPLATE_PATH.read_text().format(name=greeting_name(name), role=role, topic=topic, sender=sender)
     first_line, _, rest = text.partition("\n")
     return first_line.replace("Subject:", "").strip(), rest.strip()
 
@@ -113,22 +118,33 @@ def extract_pain_points(notes: str) -> list[dict]:
 
 # ---------- Tool 3: draft follow-up (LLM) ----------
 
-DRAFT_PROMPT = """You write short follow-up emails after a customer discovery call. The sender is a graduate student researcher.
+DRAFT_PROMPT = """You write a professional follow-up email from a graduate student researcher to someone they interviewed for a research study.
+Write three short parts:
+- "thanks": 1 sentence thanking them for their time on the call.
+- "detail": 1-2 sentences restating one or two things they shared, so they remember the conversation.
+- "ask": 1-2 sentences with exactly one request: a 15-minute follow-up call, OR an introduction to a colleague who deals with the same issue.
 Rules:
-- Under 150 words for the body.
-- Thank them and reference at least one specific thing they said, using only the pain points given.
-- Do not invent facts, numbers or details that are not in the pain points.
-- Exactly one clear ask: a 15-minute follow-up call OR an introduction to a colleague facing the same issue.
-- Plain, warm tone. No sales language, no product pitch.
-Return JSON: {"subject": "...", "body": "..."}"""
+- Use only facts in the quotes provided. Keep time words exactly as quoted (e.g. "over a weekend", "last spring"). Do not exaggerate or generalize ("for days", "recently", "often" are not allowed unless quoted).
+- You are a researcher learning, not a vendor. Never offer help, solutions or products. Never write "we can help" or similar.
+- Professional, warm, plain English. No exclamation marks.
+- Subject: short and professional, e.g. "Thank you for your time, <first name>".
+- The three parts together: under 110 words.
+Return JSON: {"subject": "...", "thanks": "...", "detail": "...", "ask": "..."}"""
+
+
+def greeting_name(name: str) -> str:
+    return f"Dr. {name.split()[-1]}" if name.startswith("Dr.") else name.split()[0]
 
 
 def draft_followup(name: str, role: str, org: str, pain_points: list[dict], sender: str) -> tuple[str, str]:
-    points = "\n".join(f"- {p['pain_point']}" for p in pain_points)
+    points = "\n".join(f'- {p["pain_point"]} (they said: "{p["source_quote"]}")' for p in pain_points)
     out = llm_json(DRAFT_PROMPT,
-                   f"Recipient: {name}, {role} at {org}\nSender name: {sender}\nPain points from our call:\n{points}",
-                   temperature=0.4)
-    return out.get("subject", "").strip(), out.get("body", "").strip()
+                   f"Recipient: {name}, {role} at {org}\nWhat they shared on the call:\n{points}",
+                   temperature=0.3)
+    parts = [out.get(k, "").strip() for k in ("thanks", "detail", "ask")]
+    # Code, not the model, owns the email layout: greeting, one blank line between paragraphs, sign-off.
+    body = f"Hi {greeting_name(name)},\n\n" + "\n\n".join(p for p in parts if p) + f"\n\nBest regards,\n{sender}"
+    return out.get("subject", "").strip(), body
 
 
 # ---------- Orchestration ----------

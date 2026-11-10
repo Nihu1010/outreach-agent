@@ -14,7 +14,7 @@ from tracing import span
 
 TEMPLATE_PATH = Path(__file__).parent / "data" / "first_touch_template.txt"
 MIN_NOTE_WORDS = 12  # below this, notes are too thin to ground a follow-up
-
+FOLLOWUP_SUBJECT = "Following up on our conversation"
 
 PROVIDERS = {  # name -> (API key env var, model env var, default model)
     "groq": ("GROQ_API_KEY", "GROQ_MODEL", "openai/gpt-oss-120b"),

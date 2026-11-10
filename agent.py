@@ -148,7 +148,7 @@ def write_intro(role: str, org: str, sources: list[dict], person_found: bool) ->
     user = f"Recipient role: {role}\nCompany: {org}{note}\n\nSources:\n{src}"
     paragraph, warnings = "", []
     for attempt in range(2):
-        paragraph = llm_json(INTRO_PROMPT, user, temperature=0.4).get("paragraph", "").strip()
+        paragraph = clean_text(llm_json(INTRO_PROMPT, user, temperature=0.4).get("paragraph", ""))
         hits = sorted({m.group(0).lower() for m in BANNED.finditer(paragraph)})
         if not hits:
             return paragraph, []
@@ -193,10 +193,19 @@ Write only the words that go in the blank, in this shape: "<their work area>, es
 Example: "running a cleanroom facility, especially how time-consuming inspections are"
 Rules:
 - 10 to 25 words. No ending punctuation. Lowercase start.
+- Plain everyday words the recipient would use themselves. Avoid jargon such as "aggregation", "leverage", "optimize", "streamline".
 - Name the topic of their experience, respectfully. Describe the problem as a challenge in the work, never as their mistake or gap (not "you weren't sure", "you forgot", "you don't know").
 - Use only facts from the notes. Do not add numbers, durations or details that are not there.
 - Neutral: no "you", "he" or "she" in the blank.
 Return JSON: {"insight": "..."}"""
+
+
+def clean_text(t: str) -> str:
+    """Normalize AI punctuation: odd hyphens to '-', em/en dashes to commas, curly quotes to straight."""
+    t = re.sub(r"[\u2010\u2011\u2012\u00ad]", "-", t or "")
+    t = re.sub(r"\s*[\u2013\u2014]\s*", ", ", t)
+    t = t.replace("\u2018", "'").replace("\u2019", "'").replace("\u201c", '"').replace("\u201d", '"')
+    return re.sub(r"\s{2,}", " ", t).strip()
 
 
 def greeting_name(name: str) -> str:
@@ -215,9 +224,10 @@ def contact_mode(raw: str) -> str:
     return "unknown"
 
 
-def meeting_context(mode_raw: str, met_by: str, met_at: str) -> str:
+def meeting_context(mode_raw: str, met_by: str, met_at: str, sender_first: str = "") -> str:
     """The 'how we were in touch' sentence. Built by code from the sheet, never written by the AI.
-    mode_raw: the sheet's mode of contact (email / phone call / in person at <event>)
+    mode_raw: the sheet's mode of contact (email / phone call / in person at <event>);
+              anything but in person means the interview was a Zoom or phone call
     met_by:   who spoke with them if it wasn't the sender, e.g. 'Nitish, my research partner,'
     met_at:   the event name, e.g. 'ALD 2026 in Tampa' (only used for in-person)"""
     mode = contact_mode(mode_raw)
@@ -226,17 +236,16 @@ def meeting_context(mode_raw: str, met_by: str, met_at: str) -> str:
         met_at = mode_raw.split(" at ", 1)[1].strip()  # "in person at ALD 2026 in Tampa"
     where = f" at {met_at}" if met_at else ""
 
-    if mode == "email":
-        return (f"{met_by} shared the email exchange you two had." if met_by
-                else "Thank you again for taking the time to reply to my email.")
-    if mode == "phone":
-        return (f"{met_by} told me about the call you two had." if met_by
-                else "Thank you again for taking the time to speak with me over the phone.")
+    # The contact only needs an introduction if they spoke with the partner, not with the sender.
+    intro = f"I am {sender_first}, a graduate student at Rochester Institute of Technology. " if met_by else ""
+
+    # In person = the conversation happened at an event. Every other mode (email, phone, Zoom, blank)
+    # means the person was reached remotely and the interview itself was a Zoom or phone call.
     if mode == "in_person":
-        return (f"{met_by} told me about the conversation you two had{where}." if met_by
+        return (intro + f"{met_by} told me about the conversation you two had{where}." if met_by
                 else f"It was great meeting you{where or ' in person'}.")
-    return (f"{met_by} told me about the conversation you two had." if met_by
-            else "Thank you again for speaking with me.")
+    return (intro + f"{met_by} told me about the call you two had." if met_by
+            else "Thank you again for taking the time to speak with me.")
 
 
 def draft_followup(contact: dict, pain_points: list[dict], sender: str) -> tuple[str, str]:
@@ -244,12 +253,13 @@ def draft_followup(contact: dict, pain_points: list[dict], sender: str) -> tuple
     out = llm_json(INSIGHT_PROMPT,
                    f"Recipient: {contact['role']} at {contact['org']}\nFrom the call notes:\n{points}",
                    temperature=0.3)
-    insight = out.get("insight", "").strip().rstrip(".")
+    insight = clean_text(out.get("insight", "")).rstrip(".,")
     text = FOLLOWUP_TEMPLATE_PATH.read_text().format(
         name=greeting_name(contact["name"]),
         sender_first=sender.split()[0],
         sender=sender,
-        context=meeting_context(contact.get("contact_mode", ""), contact.get("met_by", ""), contact.get("met_at", "")),
+        context=meeting_context(contact.get("contact_mode", ""), contact.get("met_by", ""), contact.get("met_at", ""),
+                                sender.split()[0]),
         insight=insight,
     )
     first_line, _, rest = text.partition("\n")

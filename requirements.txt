@@ -6,3 +6,4 @@ openpyxl>=3.1
 arize-phoenix-otel>=0.6
 openinference-instrumentation-anthropic>=0.1
 openinference-instrumentation-openai>=0.1
+requests>=2.31

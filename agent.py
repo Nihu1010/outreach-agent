@@ -1,7 +1,7 @@
 """Outreach agent: router + 3 tools.
 
-first_touch -> fill_template (plain code, no LLM, so it cannot break the template)
-follow_up   -> extract_pain_points (LLM) -> draft_followup (LLM)
+first_touch -> research_contact (web search) -> write_intro (LLM, rule-checked) -> fill_template (code)
+follow_up   -> extract_pain_points (LLM) -> draft_followup (approved template; the LLM fills one blank)
 """
 import json
 import os
@@ -14,7 +14,6 @@ from tracing import span
 
 TEMPLATE_PATH = Path(__file__).parent / "data" / "first_touch_template.txt"
 MIN_NOTE_WORDS = 12  # below this, notes are too thin to ground a follow-up
-FOLLOWUP_SUBJECT = "Following up on our conversation"  # edit to your approved subject line
 
 
 PROVIDERS = {  # name -> (API key env var, model env var, default model)
@@ -82,6 +81,9 @@ class Result:
     body: str = ""
     pain_points: list = field(default_factory=list)  # [{"pain_point", "source_quote"}]
     message: str = ""               # shown to the user instead of a draft when we refuse to guess
+    sources: list = field(default_factory=list)      # research used: [{"n", "title", "url"}]
+    person_found: bool = False      # did research find anything about this specific person?
+    warnings: list = field(default_factory=list)     # rule checks the draft failed; user must fix before sending
 
 
 # ---------- Router ----------
@@ -91,10 +93,74 @@ def route(call_notes: str) -> str:
     return "follow_up" if (call_notes or "").strip() else "first_touch"
 
 
-# ---------- Tool 1: template fill (no AI) ----------
+# ---------- Tool 1a: research the contact (web search) ----------
 
-def fill_template(name: str, role: str, topic: str, sender: str) -> tuple[str, str]:
-    text = TEMPLATE_PATH.read_text().format(name=greeting_name(name), role=role, topic=topic, sender=sender)
+def web_search(query: str, max_results: int = 5) -> list[dict]:
+    """Tavily search. Returns [{"title", "url", "content"}]. Needs TAVILY_API_KEY (free tier)."""
+    import requests
+    key = os.getenv("TAVILY_API_KEY", "")
+    r = requests.post("https://api.tavily.com/search", timeout=20,
+                      headers={"Authorization": f"Bearer {key}"},
+                      json={"api_key": key, "query": query, "search_depth": "basic", "max_results": max_results})
+    r.raise_for_status()
+    return [{"title": x.get("title", ""), "url": x.get("url", ""), "content": (x.get("content") or "")[:700]}
+            for x in r.json().get("results", [])]
+
+
+def research_contact(name: str, role: str, org: str) -> tuple[list[dict], bool]:
+    """Two searches: the person (public professional info only) and the company. Snippets only;
+    pages such as LinkedIn are never opened or scraped."""
+    clean = name.replace("Dr. ", "")
+    last = clean.split()[-1].lower()
+    person = [x for x in web_search(f'"{clean}" {org}', 5)
+              if last in (x["title"] + x["content"]).lower()]  # drop results about someone else
+    company = web_search(f"{org} what the company does manufacturing cleanroom", 4)
+    seen, sources = set(), []
+    for x in person[:3] + company:
+        if x["url"] not in seen:
+            seen.add(x["url"])
+            sources.append({"n": len(sources) + 1, **x})
+    return sources, bool(person)
+
+
+# ---------- Tool 1b: write the personalized first-touch paragraph (LLM) ----------
+
+INTRO_PROMPT = """You help a graduate student researcher write the middle paragraph of a first-touch email to an industry professional, asking for a short research conversation about cleanroom operations.
+Write 2-3 sentences (50-90 words) explaining why THIS person's role at THIS company matters to research on cleanroom operations:
+- Sentence 1: why their function (quality, facilities, fab operations, maintenance, compliance, research) is where cleanroom operations get tested.
+- Sentence 2: something specific about what their company makes or how it operates, taken from the sources, and the cleanroom challenge that creates.
+- Last sentence: the tension or trade-off "our research is trying to understand".
+Style example (different person): "Quality engineering is where cleanroom operations get tested most directly, which is why your seat interests me. Holding defense-grade traceability on custom, low-volume microdisplays is a different problem from high-volume quality work, since every program brings its own spec and there's little room to absorb a yield miss. Balancing that rigor against the push for faster manufacturing cycles is exactly the tension our research is trying to understand."
+Hard rules:
+- You are a student researcher asking to learn. Never mention a product, solution, tool, software, platform, startup, company, demo, pricing, or anything being built or sold.
+- Use only facts found in the numbered sources. If the sources say nothing about the person, talk about their role at the company; never invent their background, history or achievements.
+- No flattery, no exclamation marks, no em dashes. Plain, specific, professional.
+Return JSON: {"paragraph": "...", "sources_used": [numbers of the sources you relied on]}"""
+
+BANNED = re.compile(r"\b(?:our|my) (?:product|solution|tool|software|platform|startup|company|app)s?\b|"
+                    r"\b(?:solution|startup|start-up|demo|pricing|sell|selling)\b|"
+                    r"\bwe(?:'ve| have| are)? (?:built|building|developed|developing|created)\b", re.I)
+
+
+def write_intro(role: str, org: str, sources: list[dict], person_found: bool) -> tuple[str, list[str]]:
+    src = "\n\n".join(f"[{s['n']}] {s['title']} ({s['url']})\n{s['content']}" for s in sources) or "(no sources found)"
+    note = "" if person_found else "\nNote: no public information was found about this specific person."
+    user = f"Recipient role: {role}\nCompany: {org}{note}\n\nSources:\n{src}"
+    paragraph, warnings = "", []
+    for attempt in range(2):
+        paragraph = llm_json(INTRO_PROMPT, user, temperature=0.4).get("paragraph", "").strip()
+        hits = sorted({m.group(0).lower() for m in BANNED.finditer(paragraph)})
+        if not hits:
+            return paragraph, []
+        user += f"\n\nYour last draft used banned words ({', '.join(hits)}). Rewrite without them."
+        warnings = [f"Draft mentions {', '.join(hits)}. First-touch emails must not reference a product or startup. Edit before sending."]
+    return paragraph, warnings
+
+
+def fill_template(name: str, role: str, topic: str, sender: str, personal: str = "") -> tuple[str, str]:
+    text = TEMPLATE_PATH.read_text().format(name=greeting_name(name), role=role, topic=topic,
+                                            sender=sender, personal=personal)
+    text = re.sub(r"\n{3,}", "\n\n", text)
     first_line, _, rest = text.partition("\n")
     return first_line.replace("Subject:", "").strip(), rest.strip()
 
@@ -119,32 +185,48 @@ def extract_pain_points(notes: str) -> list[dict]:
 
 # ---------- Tool 3: draft follow-up (LLM) ----------
 
-DRAFT_PROMPT = """You write a professional follow-up email from a graduate student researcher to someone they interviewed for a research study.
-Write three short parts:
-- "thanks": 1 sentence thanking them for their time on the call.
-- "detail": 1-2 sentences restating one or two things they shared, so they remember the conversation.
-- "ask": 1-2 sentences with exactly one request: a 15-minute follow-up call, OR an introduction to a colleague who deals with the same issue.
+FOLLOWUP_TEMPLATE_PATH = Path(__file__).parent / "data" / "followup_template.txt"
+
+INSIGHT_PROMPT = """You fill ONE blank in a follow-up email from a graduate student researcher to someone they interviewed.
+The sentence is: "What you described about ______ shaped a lot of how we've approached our research."
+Write only the words that go in the blank, in this shape: "<their work area>, especially <the one or two things they found hardest>".
+Example: "running a cleanroom facility, especially how time-consuming inspections are"
 Rules:
-- Use only facts in the quotes provided. Keep time words exactly as quoted (e.g. "over a weekend", "last spring"). Do not exaggerate or generalize ("for days", "recently", "often" are not allowed unless quoted).
-- You are a researcher learning, not a vendor. Never offer help, solutions or products. Never write "we can help" or similar.
-- Professional, warm, plain English. No exclamation marks.
-- The three parts together: under 110 words.
-Return JSON: {"thanks": "...", "detail": "...", "ask": "..."}"""
+- 10 to 25 words. No ending punctuation. Lowercase start.
+- Name the topic of their experience, respectfully. Describe the problem as a challenge in the work, never as their mistake or gap (not "you weren't sure", "you forgot", "you don't know").
+- Use only facts from the notes. Do not add numbers, durations or details that are not there.
+- Neutral: no "you", "he" or "she" in the blank.
+Return JSON: {"insight": "..."}"""
 
 
 def greeting_name(name: str) -> str:
     return f"Dr. {name.split()[-1]}" if name.startswith("Dr.") else name.split()[0]
 
 
-def draft_followup(name: str, role: str, org: str, pain_points: list[dict], sender: str) -> tuple[str, str]:
-    points = "\n".join(f'- {p["pain_point"]} (they said: "{p["source_quote"]}")' for p in pain_points)
-    out = llm_json(DRAFT_PROMPT,
-                   f"Recipient: {name}, {role} at {org}\nWhat they shared on the call:\n{points}",
+def meeting_context(met_by: str, met_at: str) -> str:
+    """Builds the 'where we met' sentence from optional sheet columns; never written by the AI."""
+    met_by, met_at = (met_by or "").strip(), (met_at or "").strip()
+    where = f" at {met_at}" if met_at else ""
+    if met_by:
+        return f"{met_by} told me about the conversation you two had{where}."
+    return f"Thank you again for speaking with me{where}."
+
+
+def draft_followup(contact: dict, pain_points: list[dict], sender: str) -> tuple[str, str]:
+    points = "\n".join(f'- {p["pain_point"]} (notes: "{p["source_quote"]}")' for p in pain_points)
+    out = llm_json(INSIGHT_PROMPT,
+                   f"Recipient: {contact['role']} at {contact['org']}\nFrom the call notes:\n{points}",
                    temperature=0.3)
-    parts = [out.get(k, "").strip() for k in ("thanks", "detail", "ask")]
-    # Code, not the model, owns the email layout: greeting, one blank line between paragraphs, sign-off.
-    body = f"Hi {greeting_name(name)},\n\n" + "\n\n".join(p for p in parts if p) + f"\n\nBest regards,\n{sender}"
-    return FOLLOWUP_SUBJECT, body
+    insight = out.get("insight", "").strip().rstrip(".")
+    text = FOLLOWUP_TEMPLATE_PATH.read_text().format(
+        name=greeting_name(contact["name"]),
+        sender_first=sender.split()[0],
+        sender=sender,
+        context=meeting_context(contact.get("met_by", ""), contact.get("met_at", "")),
+        insight=insight,
+    )
+    first_line, _, rest = text.partition("\n")
+    return first_line.replace("Subject:", "").strip(), rest.strip()
 
 
 # ---------- Orchestration ----------
@@ -156,9 +238,18 @@ def run_contact(contact: dict, topic: str, sender: str, stage_override: str | No
         s.set_attribute("stage", stage)
 
         if stage == "first_touch":
+            if not os.getenv("TAVILY_API_KEY"):
+                return Result(stage, message="Add a Tavily API key (free) so the agent can research this contact.")
+            with span("research_contact", "TOOL"):
+                sources, person_found = research_contact(contact["name"], contact["role"], contact["org"])
+            if not sources:
+                return Result(stage, message="Couldn't find anything public about this person or company. "
+                                             "Check the spelling of the name and company, then try again.")
+            with span("write_intro", "TOOL"):
+                personal, warnings = write_intro(contact["role"], contact["org"], sources, person_found)
             with span("fill_template", "TOOL"):
-                subject, body = fill_template(contact["name"], contact["role"], topic, sender)
-            return Result(stage, subject, body)
+                subject, body = fill_template(contact["name"], contact["role"], topic, sender, personal)
+            return Result(stage, subject, body, sources=sources, person_found=person_found, warnings=warnings)
 
         if len(notes.split()) < MIN_NOTE_WORDS:
             return Result(stage, message="Not enough detail in the call notes. Add what they said about their work, then try again.")
@@ -169,5 +260,5 @@ def run_contact(contact: dict, topic: str, sender: str, stage_override: str | No
             return Result(stage, message="No clear pain points found in these notes. Add what they said was hard, then try again.")
 
         with span("draft_followup", "TOOL"):
-            subject, body = draft_followup(contact["name"], contact["role"], contact["org"], points, sender)
+            subject, body = draft_followup(contact, points, sender)
         return Result(stage, subject, body, points)

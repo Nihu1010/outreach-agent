@@ -19,7 +19,8 @@ st.set_page_config(page_title="Outreach Agent", page_icon="✉️", layout="cent
 
 # Secrets on Streamlit Cloud -> environment, before importing modules that read env vars.
 for key in ("LLM_PROVIDER", "GROQ_API_KEY", "GROQ_MODEL", "ANTHROPIC_API_KEY", "ANTHROPIC_MODEL",
-            "OPENAI_API_KEY", "OPENAI_MODEL", "OPENAI_BASE_URL", "PHOENIX_COLLECTOR_ENDPOINT", "PHOENIX_API_KEY"):
+            "OPENAI_API_KEY", "OPENAI_MODEL", "OPENAI_BASE_URL", "TAVILY_API_KEY",
+            "PHOENIX_COLLECTOR_ENDPOINT", "PHOENIX_API_KEY"):
     try:
         if key in st.secrets and not os.getenv(key):
             os.environ[key] = str(st.secrets[key])
@@ -41,16 +42,21 @@ ss.setdefault("log", [])
 # ---------- Sidebar ----------
 with st.sidebar:
     st.header("Settings")
-    sender = st.text_input("Your name (signs the email)", "Niharika Mahesh Ahirekar")
-    topic = st.text_input("Research topic (first-touch template)", "cleanroom contamination and equipment risk")
+    sender = st.text_input("Your name (signs the email)", "Niharika Ahirekar")
+    topic = "cleanroom operations"  # only used if your template contains {topic}
     if not os.getenv(KEY_NAME):
-        key = st.text_input(f"{KEY_LABEL} API key", type="password", help="Not stored. Needed for follow-up drafts only.")
+        key = st.text_input(f"{KEY_LABEL} API key", type="password", help="Not stored. Needed to write drafts.")
         if key:
             os.environ[KEY_NAME] = key
+    if not os.getenv("TAVILY_API_KEY"):
+        tkey = st.text_input("Tavily API key (web research)", type="password", help="Free at tavily.com. Not stored.")
+        if tkey:
+            os.environ["TAVILY_API_KEY"] = tkey
     st.caption(f"Model: {model()} · Tracing: {'on (Phoenix)' if tracing_on else 'off'}")
 
 st.title("Outreach Agent")
-st.caption("First-touch emails use the approved template. Follow-ups are drafted from your call notes. You review every email.")
+st.caption("First touch: the agent researches the person and company, then writes why their role matters to your research. "
+           "Follow-up: built from your call notes. You review every email.")
 
 
 # ---------- 1. Contact sheet ----------
@@ -66,7 +72,7 @@ def load_sheet(file) -> pd.DataFrame | None:
     if missing:
         st.error(f"Your sheet needs a name, role and org column. Missing: {', '.join(missing)}.")
         return None
-    for col in ("contact_id", "email", "seniority", "call_notes"):
+    for col in ("contact_id", "email", "seniority", "call_notes", "met_by", "met_at"):
         if col not in df.columns:
             df[col] = ""
     df = df.fillna("")
@@ -75,13 +81,13 @@ def load_sheet(file) -> pd.DataFrame | None:
 
 
 upload = st.file_uploader("Contact sheet (.xlsx or .csv)", type=["xlsx", "xls", "csv"],
-                          help="Columns: name, role, org (required); email, seniority, call_notes (optional). "
+                          help="Columns: name, role, org (required); email, seniority, call_notes, met_by, met_at (optional). "
                                "Leave empty to use the 30-contact synthetic sample.")
 df = load_sheet(upload)
 if df is None:
     st.stop()
 if upload is None:
-    st.caption("Using the synthetic sample sheet (30 invented contacts).")
+    st.caption("Using the synthetic sample sheet (30 invented people; first-touch contacts are placed at real companies for research).")
 
 labels = [f"{r.name} · {r.role}, {r.org}{'  ✎' if str(r.call_notes).strip() else ''}" for r in df.itertuples()]
 idx = st.selectbox("Contact (✎ = has call notes)", range(len(df)), format_func=lambda i: labels[i])
@@ -105,27 +111,38 @@ stage_choice = st.radio("Email type", ["Auto", "First touch", "Follow-up"], hori
 override = {"Auto": None, "First touch": "first_touch", "Follow-up": "follow_up"}[stage_choice]
 
 if st.button("Generate draft", type="primary"):
-    if (override == "follow_up" or (override is None and notes.strip())) and not os.getenv(KEY_NAME):
-        st.error(f"Add an {KEY_LABEL} API key in the sidebar to draft follow-ups.")
+    if not os.getenv(KEY_NAME):
+        st.error(f"Add a {KEY_LABEL} API key in the sidebar.")
     else:
         try:
-            with st.spinner("Drafting..."):
+            with st.spinner("Researching and drafting..."):
                 ss.result = run_contact(contact, topic, sender, override)
                 ss.started = time.time()
                 ss.contact_id = contact["contact_id"]
-        except Exception:
+        except Exception as e:
             ss.result = None
             st.error("Couldn't draft right now. Try again.")
+            with st.expander("Details (for debugging)"):
+                st.code(f"{type(e).__name__}: {str(e)[:500]}", language=None)
 
 # ---------- 3. Review ----------
 res = ss.result
 if res and ss.get("contact_id") == contact["contact_id"]:
-    badge = "First touch · template" if res.stage == "first_touch" else "Follow-up · AI draft"
+    badge = "First touch · researched" if res.stage == "first_touch" else "Follow-up · from call notes"
     st.subheader(badge)
 
     if res.message:
         st.info(res.message)
         st.stop()
+
+    for w in res.warnings:
+        st.error(w)
+
+    if res.sources:
+        label = "Research used (check before sending)" + ("" if res.person_found else " · nothing found on this person, role and company only")
+        with st.expander(label, expanded=True):
+            for x in res.sources:
+                st.markdown(f"[{x['n']}] [{x['title'] or x['url']}]({x['url']})")
 
     if res.pain_points:
         with st.expander("Pain points used (check each against the notes)", expanded=True):

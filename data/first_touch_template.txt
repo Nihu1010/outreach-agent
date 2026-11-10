@@ -1,13 +1,14 @@
-Subject: Student research on Cleanroom Operations
+Subject: Student research on cleanroom management practices
 
-Hi,
+Hi {name},
 
-I am Niharika, a graduate student at Rochester Institute of Technology. I'm conducting research on cleanroom management practices across the industry. I'm interested in understanding the day-to-day challenges around contamination monitoring and  compliance documentation. 
+I am Niharika, a graduate student at Rochester Institute of Technology. I'm conducting research on cleanroom management practices across the industry. I'm interested in understanding the day-to-day challenges around contamination monitoring and compliance documentation.
 
- A 15-minute conversation would help me understand what's working and where the biggest friction points are. 
+A 15-minute conversation would help me understand what's working and where the biggest friction points are.
 
 Would you be available for a Zoom meeting this week or next week?
 
 Looking forward to hearing from you.
 
 Thanks,
+{sender}

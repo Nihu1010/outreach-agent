@@ -1,0 +1,14 @@
+Subject: Following up on our conversation
+
+Hi {name},
+
+I am {sender_first}, a graduate student at Rochester Institute of Technology. {context} What you described about {insight} shaped a lot of how we've approached our research.
+
+We've spent the past few weeks building a solution that speaks directly to that. I'd love 15 minutes to walk you through it and hear your honest reaction as someone who deals with this problem firsthand.
+
+We can be flexible with the schedule. Would either this week or next week work for a short Zoom call?
+
+Thank you for your time,
+{sender}
+Graduate Student
+Rochester Institute of Technology

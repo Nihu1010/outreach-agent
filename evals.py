@@ -1,0 +1,169 @@
+"""Phase 5 evals. Runs the agent on every sample contact and scores each draft.
+
+Code checks (deterministic):  router accuracy, first-touch compliance, follow-up format,
+                              refusal on thin notes, no wrong-person match.
+LLM-judge checks:             grounding (every fact traceable to sources/notes), quality.
+
+Run from the app's Evals page, or locally:  python evals.py
+"""
+import re
+from pathlib import Path
+
+import pandas as pd
+
+import agent
+
+ROOT = Path(__file__).parent
+SAMPLE = ROOT / "data" / "contacts_sample.csv"
+LABELS = ROOT / "data" / "eval_labels.csv"
+
+TARGETS = {  # eval -> minimum pass rate (%) to ship
+    "Router accuracy": 95,
+    "First-touch compliance": 100,
+    "Follow-up format": 100,
+    "Refuses thin notes": 100,
+    "No wrong-person match": 100,
+    "Grounding (judge)": 95,
+    "Quality (judge)": 90,
+}
+
+# ---------- LLM judges ----------
+
+GROUNDING_FIRST = """You check a cold email paragraph for made-up facts.
+List every factual claim the paragraph makes about the company or the person (what they make, where, scale, customers, the person's role or history).
+A claim is supported only if the numbered sources state it. General statements about what a job function involves (e.g. "quality engineers manage defects") do not need a source.
+Verdict "pass" if every company/person claim is supported, otherwise "fail".
+Return JSON: {"verdict": "pass" | "fail", "unsupported": ["claim", ...], "reason": "one sentence"}"""
+
+GROUNDING_FOLLOW = """You check one phrase from a follow-up email against the interviewer's call notes.
+The phrase describes what the person talked about on the call. Every detail in it must be stated or clearly implied by the notes.
+Fail it if it adds details, numbers, time frames or causes that are not in the notes, or changes their meaning (e.g. "over a weekend" becoming "for days").
+Return JSON: {"verdict": "pass" | "fail", "unsupported": ["detail", ...], "reason": "one sentence"}"""
+
+QUALITY_FIRST = """You review a cold email paragraph a graduate student will send to an industry professional to ask for a research conversation.
+Pass only if ALL are true:
+1. Reads like a thoughtful person wrote it, not a report or a press release (no spec lists, no stacked numbers).
+2. Names one specific, relevant detail about the recipient's company or role.
+3. Researcher tone: curious, asking to learn. No sales language, no flattery.
+4. Clear and grammatical, 3 sentences, roughly 45-80 words.
+Return JSON: {"verdict": "pass" | "fail", "reason": "one sentence naming the main problem, or why it passes"}"""
+
+QUALITY_FOLLOW = """You review one phrase inserted into this sentence of a follow-up email:
+"What you described about ______, shaped a lot of how we've approached our research."
+Pass only if ALL are true:
+1. Reads naturally and grammatically in that sentence.
+2. Respectful: describes a challenge in their work, never their mistake or gap.
+3. Plain words, no jargon ("aggregation", "leverage", "optimize").
+4. Specific enough that the person would recognize their own conversation.
+Return JSON: {"verdict": "pass" | "fail", "reason": "one sentence"}"""
+
+
+def judge(prompt: str, content: str) -> dict:
+    out = agent.llm_json(prompt, content, temperature=0)
+    out["verdict"] = str(out.get("verdict", "fail")).lower().strip()
+    return out
+
+
+# ---------- Helpers ----------
+
+FIRST_TEMPLATE = (ROOT / "data" / "first_touch_template.txt").read_text()
+FIXED_FIRST_LINES = [ln.strip() for ln in FIRST_TEMPLATE.splitlines()[1:]
+                     if ln.strip() and "{" not in ln]  # template lines that must appear unchanged
+
+
+def first_touch_paragraph(body: str) -> str:
+    """The AI-written part: the block between the intro line and the ask."""
+    blocks = [b.strip() for b in body.split("\n\n") if b.strip()]
+    return blocks[2] if len(blocks) > 2 else ""
+
+
+def followup_insight(body: str) -> str:
+    m = re.search(r"What you described about (.+?), shaped a lot", body, re.S)
+    return m.group(1).strip() if m else ""
+
+
+def row(contact, eval_name, passed, detail="", judged=False):
+    return {"contact_id": contact["contact_id"], "name": contact["name"], "eval": eval_name,
+            "result": "pass" if passed else "fail", "detail": detail, "judge": "LLM" if judged else "code"}
+
+
+# ---------- Run ----------
+
+def run_evals(sender: str = "Niharika Ahirekar", progress=None) -> pd.DataFrame:
+    contacts = pd.read_csv(SAMPLE).fillna("")
+    labels = pd.read_csv(LABELS).fillna("").set_index("contact_id")
+    rows = []
+
+    for i, c in enumerate(contacts.to_dict("records")):
+        if progress:
+            progress(i / len(contacts), f"{c['name']} ({i + 1}/{len(contacts)})")
+        expected_stage = labels.loc[c["contact_id"], "stage"]
+
+        # Router
+        predicted = agent.route(c["call_notes"])
+        rows.append(row(c, "Router accuracy", predicted == expected_stage, f"expected {expected_stage}, got {predicted}"))
+
+        try:
+            res = agent.run_contact(c, "cleanroom operations", sender)
+        except Exception as e:  # a crash counts against every check that would have run
+            rows.append(row(c, "Grounding (judge)", False, f"agent error: {type(e).__name__}: {str(e)[:120]}"))
+            continue
+
+        # Thin notes: the agent must refuse rather than guess
+        if expected_stage == "follow_up" and len(c["call_notes"].split()) < agent.MIN_NOTE_WORDS:
+            rows.append(row(c, "Refuses thin notes", bool(res.message) and not res.body, res.message or "drafted anyway"))
+            continue
+        if res.message:
+            rows.append(row(c, "Grounding (judge)", False, f"no draft: {res.message}"))
+            continue
+
+        if res.stage == "first_touch":
+            para = first_touch_paragraph(res.body)
+            words = len(para.split())
+            missing = [ln for ln in FIXED_FIRST_LINES if ln.replace("{sender}", sender) not in res.body]
+            banned = sorted({m.group(0) for m in agent.BANNED.finditer(para)})
+            ok = not missing and not banned and 35 <= words <= 85
+            rows.append(row(c, "First-touch compliance", ok,
+                            f"{words} words" + (f"; banned: {banned}" if banned else "") + (f"; template changed" if missing else "")))
+            # Every sample person is invented, so any 'person found' is a same-name stranger.
+            rows.append(row(c, "No wrong-person match", not res.person_found,
+                            "matched a real person" if res.person_found else "none matched"))
+            src = "\n\n".join(f"[{s['n']}] {s['title']}\n{s.get('content', '')}" for s in res.sources)
+            g = judge(GROUNDING_FIRST, f"Sources:\n{src}\n\nParagraph:\n{para}")
+            rows.append(row(c, "Grounding (judge)", g["verdict"] == "pass",
+                            g.get("reason", "") + (f" Unsupported: {g.get('unsupported')}" if g.get("unsupported") else ""), True))
+            q = judge(QUALITY_FIRST, para)
+            rows.append(row(c, "Quality (judge)", q["verdict"] == "pass", q.get("reason", ""), True))
+        else:
+            insight = followup_insight(res.body)
+            words = len(insight.split())
+            ok = bool(insight) and 6 <= words <= 30 and res.body.startswith("Hi ")
+            rows.append(row(c, "Follow-up format", ok, f"{words}-word phrase"))
+            g = judge(GROUNDING_FOLLOW, f"Call notes:\n{c['call_notes']}\n\nPhrase:\n{insight}")
+            rows.append(row(c, "Grounding (judge)", g["verdict"] == "pass",
+                            g.get("reason", "") + (f" Unsupported: {g.get('unsupported')}" if g.get("unsupported") else ""), True))
+            q = judge(QUALITY_FOLLOW, insight)
+            rows.append(row(c, "Quality (judge)", q["verdict"] == "pass", q.get("reason", ""), True))
+
+        rows[-1]["draft"] = res.body  # keep the full draft once per contact for review
+
+    if progress:
+        progress(1.0, "Done")
+    return pd.DataFrame(rows)
+
+
+def summarize(df: pd.DataFrame) -> pd.DataFrame:
+    s = (df.assign(passed=df["result"].eq("pass"))
+           .groupby("eval")["passed"].agg(["sum", "count"]).reset_index())
+    s["pass_rate_%"] = (100 * s["sum"] / s["count"]).round(0).astype(int)
+    s["target_%"] = s["eval"].map(TARGETS)
+    s["status"] = ["meets target" if r >= t else "below target" for r, t in zip(s["pass_rate_%"], s["target_%"])]
+    order = {k: i for i, k in enumerate(TARGETS)}
+    return (s.rename(columns={"sum": "passed", "count": "cases"})
+             .sort_values("eval", key=lambda x: x.map(order)).reset_index(drop=True))
+
+
+if __name__ == "__main__":
+    results = run_evals(progress=lambda p, m: print(f"{p:5.0%}  {m}"))
+    print(summarize(results).to_string(index=False))
+    results.to_csv(ROOT / "results" / "eval_results.csv", index=False)

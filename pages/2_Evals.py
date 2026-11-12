@@ -47,14 +47,17 @@ if missing:
     st.error(f"Add {', '.join(missing)} in the app's Secrets before running evals.")
     st.stop()
 
-version = st.text_input("Version label for this run", "v1", help="e.g. v1 before a prompt change, v2 after.")
-st.caption("One run makes about 100 model calls and 36 web searches (well inside the free tiers) and takes 3-6 minutes.")
+version = st.text_input("Version label for this run", "v2", help="e.g. v1 before a prompt change, v2 after.")
+mode = st.radio("Run size", ["Quick: 11 contacts (for testing a fix)", "Full: 30 contacts (official score)"])
+quick = mode.startswith("Quick")
+st.caption("Quick run: about 5-8 minutes. Full run: about 15-20 minutes. Keep this tab open until it finishes; "
+           "refreshing the page loses the results.")
 
 if st.button("Run evals", type="primary"):
     bar = st.progress(0.0, "Starting...")
     try:
-        df = evals.run_evals(progress=lambda p, m: bar.progress(min(p, 1.0), m))
-        df.insert(0, "version", version)
+        df = evals.run_evals(progress=lambda p, m: bar.progress(min(p, 1.0), m), quick=quick)
+        df.insert(0, "version", version + (" (quick)" if quick else ""))
         df["your_label"] = ""  # fill in pass/fail by hand for the judge check
         ss.eval_df = df
         ss.eval_time = datetime.now().strftime("%Y-%m-%d %H:%M")

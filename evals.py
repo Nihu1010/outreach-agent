@@ -30,22 +30,24 @@ TARGETS = {  # eval -> minimum pass rate (%) to ship
 # ---------- LLM judges ----------
 
 GROUNDING_FIRST = """You check a cold email paragraph for made-up facts.
-List every factual claim the paragraph makes about the company or the person (what they make, where, scale, customers, the person's role or history).
-A claim is supported only if the numbered sources state it. General statements about what a job function involves (e.g. "quality engineers manage defects") do not need a source.
-Verdict "pass" if every company/person claim is supported, otherwise "fail".
+Given facts (never count these as claims): the recipient's name, job title and company, which come from the user's contact sheet.
+Not factual claims (ignore): general statements about what a job function involves, and the sender's own research interest ("our research is trying to understand...").
+Check only specific facts about the company or the person: products, sites, locations, sizes, numbers, dates, customers, certifications, expansions, history.
+A claim is supported if a numbered source states it or clearly paraphrases it. Fail if any such claim is missing from the sources, even if it is true in the real world.
 Return JSON: {"verdict": "pass" | "fail", "unsupported": ["claim", ...], "reason": "one sentence"}"""
 
 GROUNDING_FOLLOW = """You check one phrase from a follow-up email against the interviewer's call notes.
-The phrase describes what the person talked about on the call. Every detail in it must be stated or clearly implied by the notes.
-Fail it if it adds details, numbers, time frames or causes that are not in the notes, or changes their meaning (e.g. "over a weekend" becoming "for days").
+The phrase describes what the person talked about on the call. It may name their general work area (for example their job function or "cleanroom monitoring") without support.
+Fail it if it adds details, numbers, time frames or causes that are not in the notes, or changes their meaning (e.g. "over a weekend" becoming "for days", or something nobody does becoming something they do).
 Return JSON: {"verdict": "pass" | "fail", "unsupported": ["detail", ...], "reason": "one sentence"}"""
 
-QUALITY_FIRST = """You review a cold email paragraph a graduate student will send to an industry professional to ask for a research conversation.
+QUALITY_FIRST = """You review the middle paragraph of a cold email a graduate student will send to an industry professional.
+The greeting, the student's introduction and the request for a 15-minute call are added separately by code. Do not fail the paragraph for not asking for a conversation.
 Pass only if ALL are true:
-1. Reads like a thoughtful person wrote it, not a report or a press release (no spec lists, no stacked numbers).
+1. Reads like a thoughtful person wrote it, not a report or press release: no spec lists, no stacked numbers, no stiff phrases like "the point at which".
 2. Names one specific, relevant detail about the recipient's company or role.
-3. Researcher tone: curious, asking to learn. No sales language, no flattery.
-4. Clear and grammatical, 3 sentences, roughly 45-80 words.
+3. Researcher tone: curious and respectful. No sales language, no flattery.
+4. Clear and grammatical, no typos or misspelled names, about 45-80 words.
 Return JSON: {"verdict": "pass" | "fail", "reason": "one sentence naming the main problem, or why it passes"}"""
 
 QUALITY_FOLLOW = """You review one phrase inserted into this sentence of a follow-up email:
@@ -89,8 +91,15 @@ def row(contact, eval_name, passed, detail="", judged=False):
 
 # ---------- Run ----------
 
-def run_evals(sender: str = "Niharika Ahirekar", progress=None) -> pd.DataFrame:
+QUICK_SET = ["C01", "C03", "C05", "C09", "C12", "C17",   # first touch: 6 companies
+             "C02", "C08", "C18", "C26",                 # follow-ups incl. the hardest grounding cases
+             "C14"]                                      # thin notes
+
+
+def run_evals(sender: str = "Niharika Ahirekar", progress=None, quick: bool = False) -> pd.DataFrame:
     contacts = pd.read_csv(SAMPLE).fillna("")
+    if quick:
+        contacts = contacts[contacts["contact_id"].isin(QUICK_SET)]
     labels = pd.read_csv(LABELS).fillna("").set_index("contact_id")
     rows = []
 

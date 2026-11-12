@@ -55,13 +55,16 @@ def llm_json(system: str, user: str, temperature: float) -> dict:
     c = _clients[p]
     if p in ("groq", "openai"):
         msgs = [{"role": "system", "content": system}, {"role": "user", "content": user}]
+        extra = {"response_format": {"type": "json_object"}}
+        if "gpt-oss" in model():
+            # Reasoning models think before answering; short emails don't need deep reasoning.
+            extra["reasoning_effort"] = os.getenv("REASONING_EFFORT", "low")
         try:
-            resp = c.chat.completions.create(model=model(), temperature=temperature,
-                                             response_format={"type": "json_object"}, messages=msgs)
+            resp = c.chat.completions.create(model=model(), temperature=temperature, messages=msgs, **extra)
         except Exception as e:
             if "model" in str(e).lower() and ("not found" in str(e).lower() or "decommission" in str(e).lower()):
                 raise  # wrong model name: retrying won't help, surface it
-            # Some models reject JSON mode; retry once without it (the prompt still asks for JSON).
+            # Some models reject JSON mode or reasoning_effort; retry once without them (the prompt still asks for JSON).
             resp = c.chat.completions.create(model=model(), temperature=temperature, messages=msgs)
         text = resp.choices[0].message.content or ""
     else:
@@ -111,9 +114,11 @@ def research_contact(name: str, role: str, org: str) -> tuple[list[dict], bool]:
     """Two searches: the person (public professional info only) and the company. Snippets only;
     pages such as LinkedIn are never opened or scraped."""
     clean = name.replace("Dr. ", "")
-    last = clean.split()[-1].lower()
+    first, last = clean.split()[0].lower(), clean.split()[-1].lower()
+    org_key = max(re.findall(r"[a-z0-9]+", org.lower()), key=len, default="")  # most distinctive word, e.g. "globalfoundries"
+    # Keep a person result only if it names this person AND this company; same-name strangers are dropped.
     person = [x for x in web_search(f'"{clean}" {org}', 5)
-              if last in (x["title"] + x["content"]).lower()]  # drop results about someone else
+              if all(k in (x["title"] + " " + x["content"]).lower() for k in (first, last, org_key))]
     company = web_search(f"{org} what the company does manufacturing cleanroom", 4)
     seen, sources = set(), []
     for x in person[:3] + company:
@@ -126,14 +131,19 @@ def research_contact(name: str, role: str, org: str) -> tuple[list[dict], bool]:
 # ---------- Tool 1b: write the personalized first-touch paragraph (LLM) ----------
 
 INTRO_PROMPT = """You help a graduate student researcher write the middle paragraph of a first-touch email to an industry professional, asking for a short research conversation about cleanroom operations.
-Write 2-3 sentences (50-90 words) explaining why THIS person's role at THIS company matters to research on cleanroom operations:
-- Sentence 1: why their function (quality, facilities, fab operations, maintenance, compliance, research) is where cleanroom operations get tested.
-- Sentence 2: something specific about what their company makes or how it operates, taken from the sources, and the cleanroom challenge that creates.
-- Last sentence: the tension or trade-off "our research is trying to understand".
+Write exactly 3 sentences, 45-70 words in total, that sound like a curious student, not a report:
+- Sentence 1: why their function (quality, facilities, fab operations, maintenance, compliance, research) is where cleanroom operations get tested, and that this is why their role interests you.
+- Sentence 2: ONE specific thing about what their company makes or how it operates, taken from the sources, and the cleanroom challenge it creates. Pick the single most telling detail; do not list several.
+- Sentence 3: the tension or trade-off "our research is trying to understand".
 Style example (different person): "Quality engineering is where cleanroom operations get tested most directly, which is why your seat interests me. Holding defense-grade traceability on custom, low-volume microdisplays is a different problem from high-volume quality work, since every program brings its own spec and there's little room to absorb a yield miss. Balancing that rigor against the push for faster manufacturing cycles is exactly the tension our research is trying to understand."
 Hard rules:
-- You are a student researcher asking to learn. Never mention a product, solution, tool, software, platform, startup, company, demo, pricing, or anything being built or sold.
+- You are a student researcher asking to learn. Never mention a product, solution, tool, software, platform, startup, demo, pricing, or anything being built or sold.
 - Use only facts found in the numbered sources. If the sources say nothing about the person, talk about their role at the company; never invent their background, history or achievements.
+- Do not add facts from your own knowledge. Any size, wafer diameter, node, location, certification or customer must appear in a source; if it does not, leave it out.
+- Spell the company name exactly as given.
+- Ignore any source about a different person with the same name.
+- At most one number in the whole paragraph. No spec lists (square meters, node sizes, wafer sizes, headcounts) unless that one detail is the point.
+- Avoid stiff phrases: "the point at which", "directly shape", "stringent", "leverage", "ensure", "landscape".
 - No flattery, no exclamation marks, no em dashes. Plain, specific, professional.
 Return JSON: {"paragraph": "...", "sources_used": [numbers of the sources you relied on]}"""
 
@@ -148,7 +158,7 @@ def write_intro(role: str, org: str, sources: list[dict], person_found: bool) ->
     user = f"Recipient role: {role}\nCompany: {org}{note}\n\nSources:\n{src}"
     paragraph, warnings = "", []
     for attempt in range(2):
-        paragraph = clean_text(llm_json(INTRO_PROMPT, user, temperature=0.4).get("paragraph", ""))
+        paragraph = clean_text(llm_json(INTRO_PROMPT, user, temperature=0.2).get("paragraph", ""))
         hits = sorted({m.group(0).lower() for m in BANNED.finditer(paragraph)})
         if not hits:
             return paragraph, []
@@ -196,6 +206,8 @@ Rules:
 - Plain everyday words the recipient would use themselves. Avoid jargon such as "aggregation", "leverage", "optimize", "streamline".
 - Name the topic of their experience, respectfully. Describe the problem as a challenge in the work, never as their mistake or gap (not "you weren't sure", "you forgot", "you don't know").
 - Use only facts from the notes. Do not add numbers, durations or details that are not there.
+- Keep the meaning exactly: if the notes say something is NOT done or nobody does it, say that (e.g. "no one checks the backup logs" stays "backup logs that no one checks", never "checking backup logs").
+- Keep time words exactly as in the notes ("twice last year" stays "twice last year", never "often").
 - Neutral: no "you", "he" or "she" in the blank.
 Return JSON: {"insight": "..."}"""
 

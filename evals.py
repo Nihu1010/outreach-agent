@@ -60,8 +60,42 @@ Pass only if ALL are true:
 Return JSON: {"verdict": "pass" | "fail", "reason": "one sentence"}"""
 
 
+_status = None  # progress callback, set by run_evals
+WAITS = [20, 40, 60]  # seconds to wait after a per-minute limit before each retry
+
+
+def with_retry(fn, *args):
+    """Call fn; on a per-minute rate limit, wait and retry. On a daily limit, stop the run."""
+    import time
+    for attempt in range(len(WAITS) + 1):
+        try:
+            return fn(*args)
+        except Exception as e:
+            msg = f"{type(e).__name__}: {str(e)[:400]}"
+            low = msg.lower()
+            if not ("429" in msg or "rate limit" in low):
+                raise
+            daily = "per day" in low or "(tpd)" in low or "(rpd)" in low
+            if daily or attempt == len(WAITS):
+                import os
+                os.environ["ALLOW_FALLBACK"] = "1"
+                raise RuntimeError(("Groq daily limit reached. " if daily else "Groq kept rate-limiting after 3 waits. ")
+                                   + "The run was stopped and nothing was scored. Try again later. "
+                                   + f"Provider message: {msg}") from e
+            if _status:
+                _status(f"Per-minute limit hit, waiting {WAITS[attempt]}s before retrying...")
+            time.sleep(WAITS[attempt])
+
+
+def judge_model() -> str:
+    """The judge runs on a different model than the agent: its own rate limit, and no grading its own writing."""
+    import os
+    default = "openai/gpt-oss-20b" if agent.provider() == "groq" else ""
+    return os.getenv("JUDGE_MODEL", default)
+
+
 def judge(prompt: str, content: str) -> dict:
-    out = agent.llm_json(prompt, content, temperature=0)
+    out = with_retry(agent.llm_json, prompt, content, 0, judge_model())  # evals disable fallback, see run_evals
     out["verdict"] = str(out.get("verdict", "fail")).lower().strip()
     return out
 
@@ -97,6 +131,10 @@ QUICK_SET = ["C01", "C03", "C05", "C09", "C12", "C17",   # first touch: 6 compan
 
 
 def run_evals(sender: str = "Niharika Ahirekar", progress=None, quick: bool = False) -> pd.DataFrame:
+    import os
+    global _status
+    _status = (lambda m: progress(None, m)) if progress else None
+    os.environ["ALLOW_FALLBACK"] = "0"  # every score in a run must come from the same model
     contacts = pd.read_csv(SAMPLE).fillna("")
     if quick:
         contacts = contacts[contacts["contact_id"].isin(QUICK_SET)]
@@ -113,9 +151,12 @@ def run_evals(sender: str = "Niharika Ahirekar", progress=None, quick: bool = Fa
         rows.append(row(c, "Router accuracy", predicted == expected_stage, f"expected {expected_stage}, got {predicted}"))
 
         try:
-            res = agent.run_contact(c, "cleanroom operations", sender)
-        except Exception as e:  # a crash counts against every check that would have run
-            rows.append(row(c, "Grounding (judge)", False, f"agent error: {type(e).__name__}: {str(e)[:120]}"))
+            res = with_retry(agent.run_contact, c, "cleanroom operations", sender)
+        except RuntimeError:
+            raise  # rate limit that waiting could not fix: stop the run
+        except Exception as e:
+            msg = f"{type(e).__name__}: {str(e)[:300]}"
+            rows.append(row(c, "Agent error", False, msg))
             continue
 
         # Thin notes: the agent must refuse rather than guess
@@ -158,6 +199,7 @@ def run_evals(sender: str = "Niharika Ahirekar", progress=None, quick: bool = Fa
 
     if progress:
         progress(1.0, "Done")
+    os.environ["ALLOW_FALLBACK"] = "1"
     return pd.DataFrame(rows)
 
 
@@ -166,8 +208,9 @@ def summarize(df: pd.DataFrame) -> pd.DataFrame:
            .groupby("eval")["passed"].agg(["sum", "count"]).reset_index())
     s["pass_rate_%"] = (100 * s["sum"] / s["count"]).round(0).astype(int)
     s["target_%"] = s["eval"].map(TARGETS)
-    s["status"] = ["meets target" if r >= t else "below target" for r, t in zip(s["pass_rate_%"], s["target_%"])]
-    order = {k: i for i, k in enumerate(TARGETS)}
+    s["status"] = ["not a score: agent crashed" if pd.isna(t) else ("meets target" if r >= t else "below target")
+                   for r, t in zip(s["pass_rate_%"], s["target_%"])]
+    order = {k: i for i, k in enumerate(list(TARGETS) + ["Agent error"])}
     return (s.rename(columns={"sum": "passed", "count": "cases"})
              .sort_values("eval", key=lambda x: x.map(order)).reset_index(drop=True))
 

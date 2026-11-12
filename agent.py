@@ -37,11 +37,14 @@ def model() -> str:
 
 
 _clients = {}
+last_model_used = ""  # set when a rate-limit fallback model answered
 
 
-def llm_json(system: str, user: str, temperature: float) -> dict:
-    """One LLM call that must return a JSON object. Works with Groq, Anthropic or OpenAI."""
+def llm_json(system: str, user: str, temperature: float, model_override: str = "") -> dict:
+    """One LLM call that must return a JSON object. Works with Groq, Anthropic or OpenAI.
+    model_override: use a different model for this call (the evals use it for the judge)."""
     p = provider()
+    use_model = model_override or model()
     if p not in _clients:
         if p == "groq":
             from openai import OpenAI  # Groq speaks the OpenAI API
@@ -56,20 +59,32 @@ def llm_json(system: str, user: str, temperature: float) -> dict:
     if p in ("groq", "openai"):
         msgs = [{"role": "system", "content": system}, {"role": "user", "content": user}]
         extra = {"response_format": {"type": "json_object"}}
-        if "gpt-oss" in model():
+        if "gpt-oss" in use_model:
             # Reasoning models think before answering; short emails don't need deep reasoning.
             extra["reasoning_effort"] = os.getenv("REASONING_EFFORT", "low")
         try:
-            resp = c.chat.completions.create(model=model(), temperature=temperature, messages=msgs, **extra)
+            resp = c.chat.completions.create(model=use_model, temperature=temperature, messages=msgs, **extra)
         except Exception as e:
-            if "model" in str(e).lower() and ("not found" in str(e).lower() or "decommission" in str(e).lower()):
+            err = str(e).lower()
+            if "429" in err or "rate limit" in err:
+                fallback = os.getenv("GROQ_FALLBACK_MODEL", "openai/gpt-oss-20b") if p == "groq" else ""
+                if fallback and os.getenv("ALLOW_FALLBACK", "1") == "1" and fallback != use_model:
+                    # Free-tier limit hit on the main model: use a smaller model with its own limit so the app keeps working.
+                    resp = c.chat.completions.create(model=fallback, temperature=temperature, messages=msgs, **extra)
+                    global last_model_used
+                    last_model_used = fallback
+                    text = resp.choices[0].message.content or ""
+                    match = re.search(r"\{.*\}", text, re.S)
+                    return json.loads(match.group(0) if match else text)
+                raise
+            if "model" in err and ("not found" in err or "decommission" in err):
                 raise  # wrong model name: retrying won't help, surface it
             # Some models reject JSON mode or reasoning_effort; retry once without them (the prompt still asks for JSON).
-            resp = c.chat.completions.create(model=model(), temperature=temperature, messages=msgs)
+            resp = c.chat.completions.create(model=use_model, temperature=temperature, messages=msgs)
         text = resp.choices[0].message.content or ""
     else:
         resp = c.messages.create(
-            model=model(), max_tokens=800, temperature=temperature,
+            model=use_model, max_tokens=800, temperature=temperature,
             system=system + "\nRespond with the JSON object only, no other text.",
             messages=[{"role": "user", "content": user}])
         text = "".join(b.text for b in resp.content if b.type == "text")

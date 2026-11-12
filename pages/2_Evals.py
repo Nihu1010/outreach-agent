@@ -11,7 +11,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 st.set_page_config(page_title="Evals · Outreach Agent", page_icon="📊", layout="wide")
 
 for key in ("LLM_PROVIDER", "GROQ_API_KEY", "GROQ_MODEL", "ANTHROPIC_API_KEY", "ANTHROPIC_MODEL", "OPENAI_API_KEY",
-            "OPENAI_MODEL", "TAVILY_API_KEY", "PHOENIX_COLLECTOR_ENDPOINT", "PHOENIX_API_KEY"):
+            "OPENAI_MODEL", "TAVILY_API_KEY", "JUDGE_MODEL", "PHOENIX_COLLECTOR_ENDPOINT", "PHOENIX_API_KEY"):
     try:
         if key in st.secrets and not os.getenv(key):
             os.environ[key] = str(st.secrets[key])
@@ -26,8 +26,8 @@ init_tracing()
 ss = st.session_state
 
 st.title("Evals")
-st.caption(f"Runs the agent on all 30 sample contacts and scores every draft. Model: {model()}. "
-           "Code checks are exact; judge checks use the same model at temperature 0.")
+st.caption(f"Runs the agent on the sample contacts and scores every draft. Agent model: {model()}. "
+           f"Judge model: {evals.judge_model() or model()}. Code checks are exact; judges run at temperature 0.")
 
 with st.expander("What each eval checks", expanded=False):
     st.markdown("""
@@ -50,18 +50,26 @@ if missing:
 version = st.text_input("Version label for this run", "v2", help="e.g. v1 before a prompt change, v2 after.")
 mode = st.radio("Run size", ["Quick: 11 contacts (for testing a fix)", "Full: 30 contacts (official score)"])
 quick = mode.startswith("Quick")
-st.caption("Quick run: about 5-8 minutes. Full run: about 15-20 minutes. Keep this tab open until it finishes; "
+st.caption("Quick run: about 2-3 minutes. Full run: about 6-8 minutes. Keep this tab open until it finishes; "
            "refreshing the page loses the results.")
 
 if st.button("Run evals", type="primary"):
     bar = st.progress(0.0, "Starting...")
     try:
-        df = evals.run_evals(progress=lambda p, m: bar.progress(min(p, 1.0), m), quick=quick)
+        state = {"p": 0.0}
+
+        def update(p, m):
+            if p is not None:
+                state["p"] = min(p, 1.0)
+            bar.progress(state["p"], m)
+
+        df = evals.run_evals(progress=update, quick=quick)
         df.insert(0, "version", version + (" (quick)" if quick else ""))
         df["your_label"] = ""  # fill in pass/fail by hand for the judge check
         ss.eval_df = df
         ss.eval_time = datetime.now().strftime("%Y-%m-%d %H:%M")
     except Exception as e:
+        os.environ["ALLOW_FALLBACK"] = "1"
         st.error("The eval run stopped early.")
         st.code(f"{type(e).__name__}: {str(e)[:500]}", language=None)
 

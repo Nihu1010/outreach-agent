@@ -1,7 +1,7 @@
 contact_id,name,role,org,seniority,email,call_notes,contact_mode,met_by,met_at
 C01,Dana Whitlock,Fab Manager,GlobalFoundries,senior,dana@globalfoundries.example,,,,
 C02,Marco Ibarra,Fab Operations Manager,Lakeview Microsystems,senior,marco@lakeviewmicrosyste.example,Marco said a chilled-water line leaked over a weekend last spring and nobody noticed until Monday. Two lithography tools were down for nine days. He now walks the sub-fab himself every Friday because the building alarms only cover the main floor.,in person,"John Doe, my research partner,",ALD 2026 in Tampa
-C03,Priya Natarajan,Fab Manager,Coherent,senior,priya@coherent.example,,,,
+C03,Priyanka Wexholm,Fab Manager,Coherent,senior,priyanka@coherent.example,,,,
 C04,Tom Reinholt,Director of Fab Operations,Granite Ridge Devices,senior,tom@graniteridgedevice.example,"Tom manages two fabs. His biggest worry is water from roof drains and HVAC condensate reaching tools. Insurance covered only part of the last incident. He wants earlier warnings, not more reports.",phone call,,
 C05,Lena Ostrowski,Fab Manager,onsemi,senior,lena@onsemi.example,,,,
 C06,Kevin Mbeki,Cleanroom Facilities Engineer,Northbridge Semiconductor,mid,kevin@northbridgesemicon.example,Kevin checks particle counter logs every morning by exporting spreadsheets from three systems. Excursions are often found hours after they start. He said HVAC filter changes cause most spikes.,in person,,the SEMICON West career fair
@@ -15,7 +15,7 @@ C13,Julia Brenner,Lab Manager,Cornell NanoScale Science and Technology Facility,
 C14,Dr. Arun Mehta,Facility Manager,Riverbend University,senior,arun@riverbenduniversit.example,Arun said ok.,phone call,,
 C15,Claire Dubois,Cleanroom Manager,Minnesota Nano Center,senior,claire@minnesotananocente.example,,,,
 C16,Michael Tanaka,Quality Assurance Manager,Bayside Biologics,senior,michael@baysidebiologics.example,Michael spends about two days before every audit pulling environmental monitoring records into one report. Missing data points have led to audit findings twice. He wants a report he can trust without rebuilding it.,email,,
-C17,Grace Liu,Compliance Lead,SkyWater Technology,senior,grace@skywatertechnology.example,,,,
+C17,Grace Thornquist,Compliance Lead,SkyWater Technology,senior,grace@skywatertechnology.example,,,,
 C18,Victor Santos,QA Specialist,Meridian Medical Devices,mid,victor@meridianmedicaldev.example,Victor said deviation reports are written by hand after each excursion. The cleanroom team and QA argue about when an excursion actually started because timestamps differ between systems.,email,,
 C19,Nadia Petrova,Quality Director,Medtronic,senior,nadia@medtronic.example,,,,
 C20,Ben Archer,Compliance Manager,Coherent,senior,ben@coherent.example,,,,

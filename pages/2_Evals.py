@@ -11,7 +11,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 st.set_page_config(page_title="Evals · Outreach Agent", page_icon="📊", layout="wide")
 
 for key in ("LLM_PROVIDER", "GROQ_API_KEY", "GROQ_MODEL", "ANTHROPIC_API_KEY", "ANTHROPIC_MODEL", "OPENAI_API_KEY",
-            "OPENAI_MODEL", "TAVILY_API_KEY", "JUDGE_MODEL", "PHOENIX_COLLECTOR_ENDPOINT", "PHOENIX_API_KEY"):
+            "OPENAI_MODEL", "TAVILY_API_KEY", "JUDGE_MODEL", "PHOENIX_PROJECT", "PHOENIX_EVAL_PROJECT", "PHOENIX_COLLECTOR_ENDPOINT", "PHOENIX_API_KEY"):
     try:
         if key in st.secrets and not os.getenv(key):
             os.environ[key] = str(st.secrets[key])
@@ -20,7 +20,7 @@ for key in ("LLM_PROVIDER", "GROQ_API_KEY", "GROQ_MODEL", "ANTHROPIC_API_KEY", "
 
 import evals  # noqa: E402
 from agent import key_env, model  # noqa: E402
-from tracing import init_tracing  # noqa: E402
+from tracing import init_tracing, use_project  # noqa: E402
 
 init_tracing()
 ss = st.session_state
@@ -63,7 +63,8 @@ if st.button("Run evals", type="primary"):
                 state["p"] = min(p, 1.0)
             bar.progress(state["p"], m)
 
-        df = evals.run_evals(progress=update, quick=quick)
+        with use_project():  # eval traces go to their own Phoenix project
+            df = evals.run_evals(progress=update, quick=quick)
         df.insert(0, "version", version + (" (quick)" if quick else ""))
         df["your_label"] = ""  # fill in pass/fail by hand for the judge check
         ss.eval_df = df

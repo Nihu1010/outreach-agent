@@ -52,7 +52,7 @@ with st.sidebar:
         tkey = st.text_input("Tavily API key (web research)", type="password", help="Free at tavily.com. Not stored.")
         if tkey:
             os.environ["TAVILY_API_KEY"] = tkey
-    st.caption(f"Model: {model()} \nTracing: {'on (Phoenix)' if tracing_on else 'off'}")
+    st.caption(f"Model: {model()} \n Tracing: {'on (Phoenix)' if tracing_on else 'off'}")
 
 st.title("Outreach Agent")
 st.caption("First touch: the agent researches the person and company, then writes why their role matters to your research. "

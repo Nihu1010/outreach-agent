@@ -295,34 +295,60 @@ def draft_followup(contact: dict, pain_points: list[dict], sender: str) -> tuple
 
 # ---------- Orchestration ----------
 
+def _io(span_obj, inp=None, out=None):
+    """Attach inputs/outputs so Phoenix shows them on each span."""
+    if inp is not None:
+        span_obj.set_attribute("input.value", json.dumps(inp, default=str)[:4000])
+    if out is not None:
+        span_obj.set_attribute("output.value", json.dumps(out, default=str)[:4000])
+
+
 def run_contact(contact: dict, topic: str, sender: str, stage_override: str | None = None) -> Result:
     notes = str(contact.get("call_notes") or "").strip()
     with span("run_contact", "CHAIN", contact_id=contact.get("contact_id", ""), org=contact.get("org", "")) as s:
+        _io(s, {"name": contact.get("name"), "role": contact.get("role"), "org": contact.get("org"), "notes": notes})
+        res = _run(contact, notes, topic, sender, stage_override)
+        s.set_attribute("stage", res.stage)
+        s.set_attribute("outcome", "refused: " + res.message if res.message else "drafted")
+        _io(s, out={"subject": res.subject, "body": res.body, "message": res.message, "warnings": res.warnings})
+        return res
+
+
+def _run(contact: dict, notes: str, topic: str, sender: str, stage_override: str | None) -> Result:
+    with span("route", "TOOL") as s:
         stage = stage_override or route(notes)
-        s.set_attribute("stage", stage)
+        _io(s, {"has_notes": bool(notes), "override": stage_override}, stage)
 
-        if stage == "first_touch":
-            if not os.getenv("TAVILY_API_KEY"):
-                return Result(stage, message="Add a Tavily API key (free) so the agent can research this contact.")
-            with span("research_contact", "TOOL"):
-                sources, person_found = research_contact(contact["name"], contact["role"], contact["org"])
-            if not sources:
-                return Result(stage, message="Couldn't find anything public about this person or company. "
-                                             "Check the spelling of the name and company, then try again.")
-            with span("write_intro", "TOOL"):
-                personal, warnings = write_intro(contact["role"], contact["org"], sources, person_found)
-            with span("fill_template", "TOOL"):
-                subject, body = fill_template(contact["name"], contact["role"], topic, sender, personal)
-            return Result(stage, subject, body, sources=sources, person_found=person_found, warnings=warnings)
+    if stage == "first_touch":
+        if not os.getenv("TAVILY_API_KEY"):
+            return Result(stage, message="Add a Tavily API key (free) so the agent can research this contact.")
+        with span("research_contact", "RETRIEVER") as s:
+            sources, person_found = research_contact(contact["name"], contact["role"], contact["org"])
+            s.set_attribute("person_found", person_found)
+            s.set_attribute("source_count", len(sources))
+            _io(s, {"name": contact["name"], "org": contact["org"]}, [{"title": x["title"], "url": x["url"]} for x in sources])
+        if not sources:
+            return Result(stage, message="Couldn't find anything public about this person or company. "
+                                         "Check the spelling of the name and company, then try again.")
+        with span("write_intro", "TOOL") as s:
+            personal, warnings = write_intro(contact["role"], contact["org"], sources, person_found)
+            s.set_attribute("rule_warnings", len(warnings))
+            _io(s, {"role": contact["role"], "org": contact["org"], "sources": len(sources)}, personal)
+        with span("fill_template", "TOOL") as s:
+            subject, body = fill_template(contact["name"], contact["role"], topic, sender, personal)
+            _io(s, out=body)
+        return Result(stage, subject, body, sources=sources, person_found=person_found, warnings=warnings)
 
-        if len(notes.split()) < MIN_NOTE_WORDS:
-            return Result(stage, message="Not enough detail in the call notes. Add what they said about their work, then try again.")
+    if len(notes.split()) < MIN_NOTE_WORDS:
+        return Result(stage, message="Not enough detail in the call notes. Add what they said about their work, then try again.")
 
-        with span("extract_pain_points", "TOOL"):
-            points = extract_pain_points(notes)
-        if not points:
-            return Result(stage, message="No clear pain points found in these notes. Add what they said was hard, then try again.")
+    with span("extract_pain_points", "TOOL") as s:
+        points = extract_pain_points(notes)
+        _io(s, notes, points)
+    if not points:
+        return Result(stage, message="No clear pain points found in these notes. Add what they said was hard, then try again.")
 
-        with span("draft_followup", "TOOL"):
-            subject, body = draft_followup(contact, points, sender)
-        return Result(stage, subject, body, points)
+    with span("draft_followup", "TOOL") as s:
+        subject, body = draft_followup(contact, points, sender)
+        _io(s, [p["pain_point"] for p in points], body)
+    return Result(stage, subject, body, points)

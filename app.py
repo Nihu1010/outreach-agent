@@ -19,7 +19,7 @@ st.set_page_config(page_title="Outreach Agent", page_icon="✉️", layout="cent
 
 # Secrets on Streamlit Cloud -> environment, before importing modules that read env vars.
 for key in ("LLM_PROVIDER", "GROQ_API_KEY", "GROQ_MODEL", "ANTHROPIC_API_KEY", "ANTHROPIC_MODEL",
-            "OPENAI_API_KEY", "OPENAI_MODEL", "OPENAI_BASE_URL", "TAVILY_API_KEY",
+            "OPENAI_API_KEY", "OPENAI_MODEL", "OPENAI_BASE_URL", "TAVILY_API_KEY", "PHOENIX_PROJECT",
             "PHOENIX_COLLECTOR_ENDPOINT", "PHOENIX_API_KEY"):
     try:
         if key in st.secrets and not os.getenv(key):

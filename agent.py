@@ -131,9 +131,11 @@ def research_contact(name: str, role: str, org: str) -> tuple[list[dict], bool]:
     clean = name.replace("Dr. ", "")
     first, last = clean.split()[0].lower(), clean.split()[-1].lower()
     org_key = max(re.findall(r"[a-z0-9]+", org.lower()), key=len, default="")  # most distinctive word, e.g. "globalfoundries"
-    # Keep a person result only if it names this person AND this company; same-name strangers are dropped.
+    full = " ".join(clean.lower().split())
+    # Keep a person result only if the FULL name appears as one phrase AND the company is named.
+    # (Checking first and last name separately let staff lists match the wrong person.)
     person = [x for x in web_search(f'"{clean}" {org}', 5)
-              if all(k in (x["title"] + " " + x["content"]).lower() for k in (first, last, org_key))]
+              if full in " ".join((x["title"] + " " + x["content"]).lower().split()) and org_key in (x["title"] + " " + x["content"]).lower()]
     company = web_search(f"{org} what the company does manufacturing cleanroom", 4)
     seen, sources = set(), []
     for x in person[:3] + company:
@@ -148,7 +150,8 @@ def research_contact(name: str, role: str, org: str) -> tuple[list[dict], bool]:
 INTRO_PROMPT = """You help a graduate student researcher write the middle paragraph of a first-touch email to an industry professional, asking for a short research conversation about cleanroom operations.
 Write exactly 3 sentences, 45-70 words in total, that sound like a curious student, not a report:
 - Sentence 1: why their function (quality, facilities, fab operations, maintenance, compliance, research) is where cleanroom operations get tested, and that this is why their role interests you.
-- Sentence 2: ONE specific thing about what their company makes or how it operates, taken from the sources, and the cleanroom challenge it creates. Pick the single most telling detail; do not list several.
+- Sentence 2: ONE specific thing about what their company makes or how it operates, restating the "detail_quote" below, followed by the cleanroom challenge you think it creates. Phrase that challenge as your own guess or question ("I imagine...", "which I'd guess makes..."), never as a fact.
+  This sentence may contain no other facts about the company (no sizes, locations, certifications, rankings or customers) beyond what detail_quote says.
 - Sentence 3: the tension or trade-off "our research is trying to understand".
 Style example (different person): "Quality engineering is where cleanroom operations get tested most directly, which is why your seat interests me. Holding defense-grade traceability on custom, low-volume microdisplays is a different problem from high-volume quality work, since every program brings its own spec and there's little room to absorb a yield miss. Balancing that rigor against the push for faster manufacturing cycles is exactly the tension our research is trying to understand."
 Hard rules:
@@ -160,25 +163,53 @@ Hard rules:
 - At most one number in the whole paragraph. No spec lists (square meters, node sizes, wafer sizes, headcounts) unless that one detail is the point.
 - Avoid stiff phrases: "the point at which", "directly shape", "stringent", "leverage", "ensure", "landscape".
 - No flattery, no exclamation marks, no em dashes. Plain, specific, professional.
-Return JSON: {"paragraph": "...", "sources_used": [numbers of the sources you relied on]}"""
+Return JSON: {"detail_quote": "the exact words, copied character for character from ONE source, that your company detail is based on", "paragraph": "..."}"""
 
 BANNED = re.compile(r"\b(?:our|my) (?:product|solution|tool|software|platform|startup|company|app)s?\b|"
                     r"\b(?:solution|startup|start-up|demo|pricing|sell|selling)\b|"
                     r"\bwe(?:'ve| have| are)? (?:built|building|developed|developing|created)\b", re.I)
 
 
+def _norm(t: str) -> str:
+    return " ".join(re.sub(r"[^a-z0-9 ]", " ", (t or "").lower()).split())
+
+
+NUMBER = re.compile(r"\d[\d,.]*")
+
+
+def check_intro(paragraph: str, quote: str, sources: list[dict]) -> list[str]:
+    """Code checks on the AI paragraph. Returns problems; empty list = OK."""
+    problems = []
+    hits = sorted({m.group(0).lower() for m in BANNED.finditer(paragraph)})
+    if hits:
+        problems.append(f"used banned words ({', '.join(hits)})")
+    src = _norm(" ".join(x["title"] + " " + x.get("content", "") for x in sources))
+    if not quote or len(_norm(quote).split()) < 4 or _norm(quote) not in src:
+        problems.append("detail_quote is not copied word for word from a source")
+    # Every number in the paragraph must appear in the sources (sizes, years, wafer diameters...)
+    for n in NUMBER.findall(paragraph):
+        if _norm(n) and _norm(n) not in src:
+            problems.append(f"the number {n} is not in any source")
+    return problems
+
+
 def write_intro(role: str, org: str, sources: list[dict], person_found: bool) -> tuple[str, list[str]]:
     src = "\n\n".join(f"[{s['n']}] {s['title']} ({s['url']})\n{s['content']}" for s in sources) or "(no sources found)"
     note = "" if person_found else "\nNote: no public information was found about this specific person."
     user = f"Recipient role: {role}\nCompany: {org}{note}\n\nSources:\n{src}"
-    paragraph, warnings = "", []
-    for attempt in range(2):
-        paragraph = clean_text(llm_json(INTRO_PROMPT, user, temperature=0.2).get("paragraph", ""))
-        hits = sorted({m.group(0).lower() for m in BANNED.finditer(paragraph)})
-        if not hits:
+    paragraph, problems = "", []
+    for attempt in range(3):
+        out = llm_json(INTRO_PROMPT, user, temperature=0.2)
+        paragraph = clean_text(out.get("paragraph", ""))
+        problems = check_intro(paragraph, out.get("detail_quote", ""), sources)
+        if not problems:
             return paragraph, []
-        user += f"\n\nYour last draft used banned words ({', '.join(hits)}). Rewrite without them."
-        warnings = [f"Draft mentions {', '.join(hits)}. First-touch emails must not reference a product or startup. Edit before sending."]
+        user += f"\n\nYour last draft failed these checks: {'; '.join(problems)}. Rewrite it so every check passes."
+    warnings = []
+    if any("banned" in p for p in problems):
+        warnings.append("Draft may reference a product or startup. First-touch emails must not. Edit before sending.")
+    if any("number" in p or "detail_quote" in p for p in problems):
+        warnings.append("Couldn't confirm every company detail against the sources. Check the facts against the research list before sending.")
     return paragraph, warnings
 
 
@@ -235,6 +266,16 @@ def clean_text(t: str) -> str:
     return re.sub(r"\s{2,}", " ", t).strip()
 
 
+TIME_WORDS = re.compile(r"\b(?:\d[\d,.]*|days?|weeks?|months?|years?|hours?|daily|weekly|monthly|often|always|never|"
+                        r"constantly|frequently|recently|routinely|every|regularly)\b", re.I)
+
+
+def added_time_words(phrase: str, notes: str) -> list[str]:
+    """Time, frequency and number words in the phrase that the notes never use."""
+    n = (notes or "").lower()
+    return sorted({w.lower() for w in TIME_WORDS.findall(phrase or "") if not re.search(rf"\b{re.escape(w.lower())}\b", n)})
+
+
 def greeting_name(name: str) -> str:
     return f"Dr. {name.split()[-1]}" if name.startswith("Dr.") else name.split()[0]
 
@@ -281,6 +322,12 @@ def draft_followup(contact: dict, pain_points: list[dict], sender: str) -> tuple
                    f"Recipient: {contact['role']} at {contact['org']}\nFrom the call notes:\n{points}",
                    temperature=0.3)
     insight = clean_text(out.get("insight", "")).rstrip(".,")
+    added = added_time_words(insight, contact.get("call_notes", ""))
+    if added:  # e.g. notes say "until Monday", draft says "for days": ask once more, naming the problem
+        out = llm_json(INSIGHT_PROMPT, f"Recipient: {contact['role']} at {contact['org']}\nFrom the call notes:\n{points}"
+                       f"\n\nYour last phrase used words not in the notes ({', '.join(added)}). Rewrite without them.",
+                       temperature=0.3)
+        insight = clean_text(out.get("insight", "")).rstrip(".,")
     text = FOLLOWUP_TEMPLATE_PATH.read_text().format(
         name=greeting_name(contact["name"]),
         sender_first=sender.split()[0],

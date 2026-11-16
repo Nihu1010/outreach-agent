@@ -1,0 +1,8 @@
+[
+ {"label": "Baseline", "file": "baseline_2026-11-12.csv", "date": "2026-11-12", "build": "v9",
+  "note": "First scored run. Judges ran on the agent's own model with the original judge prompts."},
+ {"label": "Round 2 · run 1", "file": "round2_run1_2026-11-12.csv", "date": "2026-11-12", "build": "v12",
+  "note": "Name + company person filter, one-detail paragraph, stricter grounding rules. Judges fixed and moved to gpt-oss-20b."},
+ {"label": "Round 2 · run 2", "file": "round2_run2_2026-11-15.csv", "date": "2026-11-15", "build": "v12",
+  "note": "Same code as run 1. The gap between the two runs shows run-to-run variation from web search results and model randomness."}
+]

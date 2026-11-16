@@ -1,0 +1,420 @@
+version,contact_id,name,eval,result,detail,judge,draft,your_label
+v1,C01,Dana Whitlock,Router accuracy,pass,"expected first_touch, got first_touch",code,,
+v1,C01,Dana Whitlock,First-touch compliance,pass,84 words,code,,
+v1,C01,Dana Whitlock,No wrong-person match,fail,matched a real person,code,,
+v1,C01,Dana Whitlock,Grounding (judge),pass,All company claims are supported by the provided sources.,LLM,,
+v1,C01,Dana Whitlock,Quality (judge),fail,"It fails because it does not adopt a curious, learning tone and instead states research aims without asking for a conversation.",LLM,"Hi Dana,
+
+My name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.
+
+Fab management is the point where cleanroom processes are executed and evaluated, which is why your role is central to my inquiry. GlobalFoundries operates multi-billion-dollar fabs, such as the 23,000 sqm cleanroom opened in Singapore, producing integrated circuits for smart devices, data centers and automotive applications, which creates a complex environment for contamination control and resource sustainability. Balancing the stringent contamination controls needed for high-volume semiconductor output with the drive for faster cycles and greener operations is the tension our research aims to understand.
+
+Could I ask you for fifteen minutes later this week or next for a short conversation online?
+
+Best,
+Niharika Ahirekar",
+v1,C02,Marco Ibarra,Router accuracy,pass,"expected follow_up, got follow_up",code,,
+v1,C02,Marco Ibarra,Follow-up format,pass,19-word phrase,code,,
+v1,C02,Marco Ibarra,Grounding (judge),fail,adds a time frame not specified in the notes Unsupported: ['go unnoticed for days'],LLM,,
+v1,C02,Marco Ibarra,Quality (judge),pass,"The phrase reads naturally, respects the challenge, uses plain language, and is specific to the described issue.",LLM,"Hi Marco,
+
+I am Niharika, a graduate student at Rochester Institute of Technology. John Doe, my research partner, told me about the conversation you two had at ALD 2026 in Tampa. What you described about monitoring fab infrastructure, especially detecting chilled-water leaks that go unnoticed for days and limited alarm coverage requiring manual inspections, shaped a lot of how we've approached our research.
+
+We've spent the past few weeks building a solution that speaks directly to that. I'd love 15 minutes to walk you through it and hear your honest reaction as someone who deals with this problem firsthand.
+
+We can be flexible with the schedule. Would either this week or next week work for a short Zoom call?
+
+Thank you for your time,
+Niharika Ahirekar
+Graduate Student
+Rochester Institute of Technology",
+v1,C03,Priya Natarajan,Router accuracy,pass,"expected first_touch, got first_touch",code,,
+v1,C03,Priya Natarajan,First-touch compliance,pass,85 words,code,,
+v1,C03,Priya Natarajan,No wrong-person match,fail,matched a real person,code,,
+v1,C03,Priya Natarajan,Grounding (judge),fail,"these specific facility details are not supported by the provided sources Unsupported: [""Coherent's 700,000\u202fsq\u202fft facility includes Class\u202f1000 ballroom‑style cleanrooms"", ""Coherent's 700,000\u202fsq\u202fft facility includes high‑volume epitaxial systems""]",LLM,,
+v1,C03,Priya Natarajan,Quality (judge),fail,"The paragraph lacks a curious, learning tone and does not ask for a conversation, so it does not meet the researcher‑asking‑to‑learn requirement.",LLM,"Hi Priya,
+
+My name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.
+
+Fab managers oversee day to day fab operations, where cleanroom protocols are applied and performance measured, so their role directly tests cleanroom operations. Coherent is expanding the world's first 150 mm indium phosphide manufacturing line in a 700,000 sq ft facility that includes Class 1000 ballroom style cleanrooms and high volume epitaxial systems, creating a challenge of maintaining particle free environments while scaling high throughput epitaxy. Balancing strict contamination control with the pressure to increase wafer throughput is the tension our research aims to understand.
+
+Could I ask you for fifteen minutes later this week or next for a short conversation online?
+
+Best,
+Niharika Ahirekar",
+v1,C04,Tom Reinholt,Router accuracy,pass,"expected follow_up, got follow_up",code,,
+v1,C04,Tom Reinholt,Follow-up format,pass,18-word phrase,code,,
+v1,C04,Tom Reinholt,Grounding (judge),pass,All details in the phrase are stated or implied by the call notes,LLM,,
+v1,C04,Tom Reinholt,Quality (judge),pass,"The phrase 'the water intrusion issues in fab operations' reads naturally, is respectful, uses plain language, and is specific enough for the recipient to recognize the conversation.",LLM,"Hi Tom,
+
+Thank you again for taking the time to speak with me. What you described about fab operations, especially water from roof drains and HVAC condensate reaching tools and the insurance shortfall after incidents, shaped a lot of how we've approached our research.
+
+We've spent the past few weeks building a solution that speaks directly to that. I'd love 15 minutes to walk you through it and hear your honest reaction as someone who deals with this problem firsthand.
+
+We can be flexible with the schedule. Would either this week or next week work for a short Zoom call?
+
+Thank you for your time,
+Niharika Ahirekar
+Graduate Student
+Rochester Institute of Technology",
+v1,C05,Lena Ostrowski,Router accuracy,pass,"expected first_touch, got first_touch",code,,
+v1,C05,Lena Ostrowski,First-touch compliance,pass,71 words,code,,
+v1,C05,Lena Ostrowski,No wrong-person match,fail,matched a real person,code,,
+v1,C05,Lena Ostrowski,Grounding (judge),fail,"These claims lack supporting citations in the provided sources. Unsupported: ['A Fab Manager oversees the manufacturing floor where cleanroom protocols are applied directly, making that role the primary testbed for operational effectiveness.', ""onsemi's recent establishment of end-to-end silicon-carbide production in the Czech Republic creates a stringent contamination-control challenge for advanced power semiconductor devices.""]",LLM,,
+v1,C05,Lena Ostrowski,Quality (judge),fail,"It does not adopt a curious, learning tone or ask for a conversation; it merely states the research tension without requesting to learn from the recipient.",LLM,"Hi Lena,
+
+My name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.
+
+A Fab Manager oversees the manufacturing floor where cleanroom protocols are applied directly, making that role the primary testbed for operational effectiveness. onsemi's recent establishment of end-to-end silicon-carbide production in the Czech Republic involves wafer transport and processing within cleanrooms, creating a stringent contamination-control challenge for advanced power semiconductor devices. Understanding how to balance rigorous cleanroom standards with the need for high-throughput yields is the tension our research seeks to clarify.
+
+Could I ask you for fifteen minutes later this week or next for a short conversation online?
+
+Best,
+Niharika Ahirekar",
+v1,C06,Kevin Mbeki,Router accuracy,pass,"expected follow_up, got follow_up",code,,
+v1,C06,Kevin Mbeki,Follow-up format,pass,13-word phrase,code,,
+v1,C06,Kevin Mbeki,Grounding (judge),fail,"The phrase mentions cleanroom facilities, which is not stated or implied in the notes Unsupported: ['cleanroom facilities']",LLM,,
+v1,C06,Kevin Mbeki,Quality (judge),pass,"The phrase fits naturally, is respectful, uses plain language, and is specific.",LLM,"Hi Kevin,
+
+It was great meeting you at the SEMICON West career fair. What you described about cleanroom facilities, especially manual data extraction each morning and delayed detection of excursions, shaped a lot of how we've approached our research.
+
+We've spent the past few weeks building a solution that speaks directly to that. I'd love 15 minutes to walk you through it and hear your honest reaction as someone who deals with this problem firsthand.
+
+We can be flexible with the schedule. Would either this week or next week work for a short Zoom call?
+
+Thank you for your time,
+Niharika Ahirekar
+Graduate Student
+Rochester Institute of Technology",
+v1,C07,Sofia Alvarez,Router accuracy,pass,"expected first_touch, got first_touch",code,,
+v1,C07,Sofia Alvarez,First-touch compliance,pass,81 words,code,,
+v1,C07,Sofia Alvarez,No wrong-person match,fail,matched a real person,code,,
+v1,C07,Sofia Alvarez,Grounding (judge),fail,"These claims are not directly supported by the provided sources Unsupported: [""Regeneron's large-scale cell-culture facilities"", 'stringent environmental controls']",LLM,,
+v1,C07,Sofia Alvarez,Quality (judge),fail,"The paragraph does not explicitly ask to learn from the recipient or request a conversation, so it lacks the required curious, learning‑oriented tone.",LLM,"Hi Sofia,
+
+My name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.
+
+Facilities engineering is the function where cleanroom operations are most directly validated, which is why your role is central to my inquiry. Regeneron's rapid expansion of bulk drug and biopharmaceutical manufacturing, including new fill-finish lines and large-scale cell-culture facilities, relies heavily on clean-room equipment, CIP/SIP processes, and stringent environmental controls, creating complex sterility and throughput challenges. Understanding how you balance the need for rigorous contamination control with the pressure to scale production is the exact tension our research aims to characterize.
+
+Could I ask you for fifteen minutes later this week or next for a short conversation online?
+
+Best,
+Niharika Ahirekar",
+v1,C08,Raj Kulkarni,Router accuracy,pass,"expected follow_up, got follow_up",code,,
+v1,C08,Raj Kulkarni,Follow-up format,pass,19-word phrase,code,,
+v1,C08,Raj Kulkarni,Grounding (judge),fail,"The phrase asserts that particle counts are correlated with room activities, but the notes state that nobody connects counts to what was happening in the room. Unsupported: ['correlating particle counts with room activities']",LLM,,
+v1,C08,Raj Kulkarni,Quality (judge),pass,"The phrase fits naturally, is respectful, uses plain language, and is specific to the conversation.",LLM,"Hi Raj,
+
+Thank you again for taking the time to speak with me. What you described about cleanroom particle monitoring, especially correlating particle counts with room activities and gathering data from multiple tools for root-cause reviews, shaped a lot of how we've approached our research.
+
+We've spent the past few weeks building a solution that speaks directly to that. I'd love 15 minutes to walk you through it and hear your honest reaction as someone who deals with this problem firsthand.
+
+We can be flexible with the schedule. Would either this week or next week work for a short Zoom call?
+
+Thank you for your time,
+Niharika Ahirekar
+Graduate Student
+Rochester Institute of Technology",
+v1,C09,Hannah Cole,Router accuracy,pass,"expected first_touch, got first_touch",code,,
+v1,C09,Hannah Cole,First-touch compliance,pass,82 words,code,,
+v1,C09,Hannah Cole,No wrong-person match,fail,matched a real person,code,,
+v1,C09,Hannah Cole,Grounding (judge),pass,All factual claims about SkyWater are supported by the provided sources,LLM,,
+v1,C09,Hannah Cole,Quality (judge),fail,"It reads like a report with detailed specs and does not include a curious, learning‑oriented request, violating criteria 1 and 3.",LLM,"Hi Hannah,
+
+My name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.
+
+Facilities engineering is the point at which cleanroom operations are most directly validated, because it oversees the environment, equipment maintenance, and compliance that keep the fab running. At SkyWater, the flagship 91,000-sq-ft cleanroom (class 10 with SMIF handling) supports both commercial and mission-critical semiconductor production, including rad-hard and mixed-signal CMOS devices, creating a unique challenge of maintaining ultra-low particle levels while scaling volume. Balancing that stringent contamination control with the push for higher throughput is the trade-off our research aims to understand.
+
+Could I ask you for fifteen minutes later this week or next for a short conversation online?
+
+Best,
+Niharika Ahirekar",
+v1,C10,Omar Haddad,Router accuracy,pass,"expected first_touch, got first_touch",code,,
+v1,C10,Omar Haddad,First-touch compliance,pass,70 words,code,,
+v1,C10,Omar Haddad,No wrong-person match,fail,matched a real person,code,,
+v1,C10,Omar Haddad,Grounding (judge),fail,"The sources confirm a Wolfspeed fab in Marcy, NY and its automotive/industrial focus, but do not state that it is a 200 mm silicon‑carbide wafer fab. Unsupported: [""Wolfspeed's new 200\u202fmm silicon-carbide wafer fab in Marcy, NY""]",LLM,,
+v1,C10,Omar Haddad,Quality (judge),fail,"The paragraph lacks a clear, curious request to learn from the professional, so it does not meet the researcher‑tone requirement.",LLM,"Hi Omar,
+
+My name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.
+
+Cleanroom Engineer is where cleanroom operations get tested most directly, which is why your seat interests me. Wolfspeed's new 200 mm silicon-carbide wafer fab in Marcy, NY, scales production of SiC devices for automotive and industrial applications, creating a cleanroom challenge of maintaining ultra-low particle levels while supporting high-volume throughput. Balancing that contamination control with the push for faster manufacturing cycles is the tension our research is trying to understand.
+
+Could I ask you for fifteen minutes later this week or next for a short conversation online?
+
+Best,
+Niharika Ahirekar",
+v1,C11,Dr. Elise Fournier,Router accuracy,pass,"expected follow_up, got follow_up",code,,
+v1,C11,Dr. Elise Fournier,Follow-up format,pass,20-word phrase,code,,
+v1,C11,Dr. Elise Fournier,Grounding (judge),pass,All details in the phrase are stated or implied by the call notes,LLM,,
+v1,C11,Dr. Elise Fournier,Quality (judge),pass,"The phrase fits naturally, is respectful, uses plain language, and is specific enough.",LLM,"Hi Dr. Fournier,
+
+I am Niharika, a graduate student at Rochester Institute of Technology. John Doe, my research partner, told me about the call you two had. What you described about cleanroom gowning procedures, especially students forgetting steps and the difficulty of tracing contamination back to a specific person or time, shaped a lot of how we've approached our research.
+
+We've spent the past few weeks building a solution that speaks directly to that. I'd love 15 minutes to walk you through it and hear your honest reaction as someone who deals with this problem firsthand.
+
+We can be flexible with the schedule. Would either this week or next week work for a short Zoom call?
+
+Thank you for your time,
+Niharika Ahirekar
+Graduate Student
+Rochester Institute of Technology",
+v1,C12,Dr. Sam Okafor,Router accuracy,pass,"expected first_touch, got first_touch",code,,
+v1,C12,Dr. Sam Okafor,First-touch compliance,fail,89 words,code,,
+v1,C12,Dr. Sam Okafor,No wrong-person match,fail,matched a real person,code,,
+v1,C12,Dr. Sam Okafor,Grounding (judge),fail,"Several claims about the director role, oversight duties, academic support, staff contamination control, workload diversity, and research objectives are not backed by the provided sources. Unsupported: ['Director of the Microfabrication Facility (title claim)', 'oversee the 9,500\u202fsq\u202fft cleanroom (oversight claim)', 'the Penn State Nanofabrication Laboratory supports academic projects (academic support claim)', 'requiring the staff to keep particle contamination low while handling a diverse mix of research and commercial workloads (staff requirement and workload mix claim)', 'Our research aims to understand the trade‑off between stringent contamination control and the pressure to increase throughput for such varied user demands (research aim claim)']",LLM,,
+v1,C12,Dr. Sam Okafor,Quality (judge),fail,"The paragraph reads like a report and never asks a question or shows curiosity, so it fails the tone and purpose requirements.",LLM,"Hi Dr. Okafor,
+
+My name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.
+
+As Director of the Microfabrication Facility, you oversee the 9,500 sq ft cleanroom where process control, equipment maintenance, and compliance are exercised, making it the primary arena where cleanroom practices are validated. The Penn State Nanofabrication Laboratory supports academic and external company projects with state-of-the-art lithography and etch tools, requiring the staff to keep particle contamination low while handling a diverse mix of research and commercial workloads. Our research aims to understand the trade-off between stringent contamination control and the pressure to increase throughput for such varied user demands.
+
+Could I ask you for fifteen minutes later this week or next for a short conversation online?
+
+Best,
+Niharika Ahirekar",
+v1,C13,Julia Brenner,Router accuracy,pass,"expected first_touch, got first_touch",code,,
+v1,C13,Julia Brenner,First-touch compliance,fail,90 words,code,,
+v1,C13,Julia Brenner,No wrong-person match,fail,matched a real person,code,,
+v1,C13,Julia Brenner,Grounding (judge),fail,"These claims about the Lab Manager role, research focus, and contamination‑control challenges are not supported by the provided sources. Unsupported: ['As Lab Manager, you oversee the day-to‑day cleanroom environment where process control, contamination prevention, and equipment qualification are directly exercised, making your role the primary testbed for cleanroom operations.', 'Our research seeks to understand the trade‑off between the flexibility required for multi‑disciplinary user projects and the stringent contamination controls needed for reproducible nanofabrication.', 'maintaining ultra‑low particulate levels across diverse, high‑precision processes']",LLM,,
+v1,C13,Julia Brenner,Quality (judge),fail,"The paragraph does not adopt a curious, learning‑oriented tone or ask for a conversation, exceeds the 45‑80 word limit, and reads more like a technical description than a thoughtful, personal email.",LLM,"Hi Julia,
+
+My name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.
+
+As Lab Manager, you oversee the day-to-day cleanroom environment where process control, contamination prevention, and equipment qualification are directly exercised, making your role the primary testbed for cleanroom operations. CNF supports a broad spectrum of nanofabrication projects, including MEMS, microfluidics, nanomagnetics, and bioelectronics, using tools such as electron-beam lithography, CVD, and reactive-ion etching, which creates the challenge of maintaining ultra-low particulate levels across diverse, high-precision processes. Our research seeks to understand the trade-off between the flexibility required for multi-disciplinary user projects and the stringent contamination controls needed for reproducible nanofabrication.
+
+Could I ask you for fifteen minutes later this week or next for a short conversation online?
+
+Best,
+Niharika Ahirekar",
+v1,C14,Dr. Arun Mehta,Router accuracy,pass,"expected follow_up, got follow_up",code,,
+v1,C14,Dr. Arun Mehta,Refuses thin notes,pass,"Not enough detail in the call notes. Add what they said about their work, then try again.",code,,
+v1,C15,Claire Dubois,Router accuracy,pass,"expected first_touch, got first_touch",code,,
+v1,C15,Claire Dubois,First-touch compliance,fail,87 words,code,,
+v1,C15,Claire Dubois,No wrong-person match,fail,matched a real person,code,,
+v1,C15,Claire Dubois,Grounding (judge),fail,"no source confirms the cleanroom size for Minnesota Nano Center Unsupported: ['Minnesota Nano Center has a 5,000\u202fsq\u202fft Class\u202f100 cleanroom']",LLM,,
+v1,C15,Claire Dubois,Quality (judge),fail,"The paragraph reads like a report with detailed specs and does not pose a genuine learning question, violating criteria 1 and 3.",LLM,"Hi Claire,
+
+My name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.
+
+Cleanroom management is the point where the performance of nanofabrication processes is directly validated, which is why your role is central to my inquiry. The Minnesota Nano Center provides nanofabrication services for integrated circuits, advanced sensors, MEMS, and microfluidic systems within a 5,000 sq ft Class 100 cleanroom, creating the need to balance ultra-low particulate control with the diverse material handling requirements of these devices. Understanding how that trade-off between stringent contamination limits and flexible research workflows is managed is the tension our research seeks to capture.
+
+Could I ask you for fifteen minutes later this week or next for a short conversation online?
+
+Best,
+Niharika Ahirekar",
+v1,C16,Michael Tanaka,Router accuracy,pass,"expected follow_up, got follow_up",code,,
+v1,C16,Michael Tanaka,Follow-up format,pass,20-word phrase,code,,
+v1,C16,Michael Tanaka,Grounding (judge),pass,All details in the phrase are stated or clearly implied by the call notes.,LLM,,
+v1,C16,Michael Tanaka,Quality (judge),pass,"The phrase fits naturally, is respectful, uses plain language, and is specific enough.",LLM,"Hi Michael,
+
+Thank you again for taking the time to speak with me. What you described about manual data aggregation for audits, especially the two-day effort to pull records together and the risk of missing data points, shaped a lot of how we've approached our research.
+
+We've spent the past few weeks building a solution that speaks directly to that. I'd love 15 minutes to walk you through it and hear your honest reaction as someone who deals with this problem firsthand.
+
+We can be flexible with the schedule. Would either this week or next week work for a short Zoom call?
+
+Thank you for your time,
+Niharika Ahirekar
+Graduate Student
+Rochester Institute of Technology",
+v1,C17,Grace Liu,Router accuracy,pass,"expected first_touch, got first_touch",code,,
+v1,C17,Grace Liu,First-touch compliance,pass,62 words,code,,
+v1,C17,Grace Liu,No wrong-person match,fail,matched a real person,code,,
+v1,C17,Grace Liu,Grounding (judge),fail,"the paragraph claims the person holds a role at SkyWater, which is not supported by any provided source Unsupported: ['the recipient has a role at SkyWater']",LLM,,
+v1,C17,Grace Liu,Quality (judge),fail,"It reads like a report with spec lists and lacks a curious, learning‑oriented request, violating criteria 1 and 3.",LLM,"Hi Grace,
+
+My name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.
+
+Compliance leadership is where cleanroom operations are most directly validated, which is why your role at SkyWater is relevant to our study. SkyWater's 114,000-sq-ft class-1 cleanroom and high-volume 200 mm fab introduce strict regulatory and contamination-control challenges that must be continuously met. Balancing rigorous compliance requirements with the need for rapid production scaling is the tension our research is trying to understand.
+
+Could I ask you for fifteen minutes later this week or next for a short conversation online?
+
+Best,
+Niharika Ahirekar",
+v1,C18,Victor Santos,Router accuracy,pass,"expected follow_up, got follow_up",code,,
+v1,C18,Victor Santos,Follow-up format,pass,18-word phrase,code,,
+v1,C18,Victor Santos,Grounding (judge),fail,"The phrase adds details about accuracy and resolution of timestamp disagreements not stated in the notes Unsupported: ['keeping them accurate', 'resolving timestamp disagreements']",LLM,,
+v1,C18,Victor Santos,Quality (judge),pass,"The phrase fits naturally, is respectful, uses plain language, and is specific to the conversation.",LLM,"Hi Victor,
+
+Thank you again for taking the time to speak with me. What you described about writing deviation reports by hand, especially keeping them accurate and resolving timestamp disagreements about when an excursion started, shaped a lot of how we've approached our research.
+
+We've spent the past few weeks building a solution that speaks directly to that. I'd love 15 minutes to walk you through it and hear your honest reaction as someone who deals with this problem firsthand.
+
+We can be flexible with the schedule. Would either this week or next week work for a short Zoom call?
+
+Thank you for your time,
+Niharika Ahirekar
+Graduate Student
+Rochester Institute of Technology",
+v1,C19,Nadia Petrova,Router accuracy,pass,"expected first_touch, got first_touch",code,,
+v1,C19,Nadia Petrova,First-touch compliance,pass,74 words,code,,
+v1,C19,Nadia Petrova,No wrong-person match,fail,matched a real person,code,,
+v1,C19,Nadia Petrova,Grounding (judge),fail,"These claims are not supported by any of the provided sources Unsupported: ['your role as Quality Director is central to my inquiry', 'creating a moving-target challenge for maintaining contamination control while meeting high-volume demand']",LLM,,
+v1,C19,Nadia Petrova,Quality (judge),fail,"The paragraph does not include a clear, curious request to learn or a invitation for a research conversation, violating the researcher tone requirement.",LLM,"Hi Nadia,
+
+My name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.
+
+Quality leadership is the point at which cleanroom performance is most directly evaluated, which is why your role as Quality Director is central to my inquiry. Medtronic's largest California site produces diabetes-treatment devices in a complex environment that includes labs, offices and multiple cleanrooms, creating a moving-target challenge for maintaining contamination control while meeting high-volume demand. Our research seeks to understand how firms balance strict quality compliance with the pressure to accelerate manufacturing cycles.
+
+Could I ask you for fifteen minutes later this week or next for a short conversation online?
+
+Best,
+Niharika Ahirekar",
+v1,C20,Ben Archer,Router accuracy,pass,"expected first_touch, got first_touch",code,,
+v1,C20,Ben Archer,First-touch compliance,fail,90 words,code,,
+v1,C20,Ben Archer,No wrong-person match,fail,matched a real person,code,,
+v1,C20,Ben Archer,Grounding (judge),fail,"These claims lack supporting sources Unsupported: ['your role as Compliance Manager', 'Coherent is scaling high-volume photonic device production']",LLM,,
+v1,C20,Ben Archer,Quality (judge),fail,"The paragraph reads like a report with many specifications and lacks a curious, learning‑oriented request, violating the thoughtful, inquiry‑focused tone required.",LLM,"Hi Ben,
+
+My name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.
+
+Compliance management is where cleanroom operations are most directly validated, which is why your role as Compliance Manager is relevant to our study. Coherent's recent expansion of a state-of-the-art 700,000-sq-ft manufacturing cleanroom for its 150 mm indium phosphide line, together with the sale of a 65,000-sq-ft epitaxial facility that houses Class 1000 ballroom-style cleanrooms, creates a unique challenge of maintaining regulatory and quality standards while scaling high-volume photonic device production. Balancing strict compliance requirements with the pressure to accelerate throughput and yield is the tension our research aims to understand.
+
+Could I ask you for fifteen minutes later this week or next for a short conversation online?
+
+Best,
+Niharika Ahirekar",
+v1,C21,Luis Romero,Router accuracy,pass,"expected follow_up, got follow_up",code,,
+v1,C21,Luis Romero,Follow-up format,pass,15-word phrase,code,,
+v1,C21,Luis Romero,Grounding (judge),pass,All details are stated or clearly implied by the notes,LLM,,
+v1,C21,Luis Romero,Quality (judge),pass,"The phrase fits naturally, is respectful, uses plain language, and is specific to the conversation.",LLM,"Hi Luis,
+
+Thank you again for taking the time to speak with me. What you described about equipment maintenance, especially reacting to unexpected tool alarms and waiting ten days for spare parts, shaped a lot of how we've approached our research.
+
+We've spent the past few weeks building a solution that speaks directly to that. I'd love 15 minutes to walk you through it and hear your honest reaction as someone who deals with this problem firsthand.
+
+We can be flexible with the schedule. Would either this week or next week work for a short Zoom call?
+
+Thank you for your time,
+Niharika Ahirekar
+Graduate Student
+Rochester Institute of Technology",
+v1,C22,Aisha Bello,Router accuracy,pass,"expected first_touch, got first_touch",code,,
+v1,C22,Aisha Bello,First-touch compliance,pass,72 words,code,,
+v1,C22,Aisha Bello,No wrong-person match,fail,matched a real person,code,,
+v1,C22,Aisha Bello,Grounding (judge),fail,"Sources do not explicitly confirm these specific details Unsupported: ['The line involves extensive wafer transport within classified cleanrooms', 'The line creates strict contamination-control challenges for high-power semiconductor production']",LLM,,
+v1,C22,Aisha Bello,Quality (judge),fail,"The paragraph lacks a curious, learning-oriented request; it states research goals instead of asking to discuss, violating the researcher tone requirement.",LLM,"Hi Aisha,
+
+My name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.
+
+Maintenance supervision sits at the intersection of facilities upkeep and cleanroom integrity, making it the point where operational reliability directly tests cleanroom performance. onsemi's rollout of an end-to-end silicon-carbide wafer line in the Czech Republic involves extensive wafer transport within classified cleanrooms, creating strict contamination-control challenges for high-power semiconductor production. Our research seeks to understand how maintenance practices balance equipment uptime with the need to preserve ultra-low particle levels in such environments.
+
+Could I ask you for fifteen minutes later this week or next for a short conversation online?
+
+Best,
+Niharika Ahirekar",
+v1,C23,Derek Lindqvist,Router accuracy,pass,"expected follow_up, got follow_up",code,,
+v1,C23,Derek Lindqvist,Follow-up format,pass,20-word phrase,code,,
+v1,C23,Derek Lindqvist,Grounding (judge),pass,All details in the phrase are stated or implied by the call notes,LLM,,
+v1,C23,Derek Lindqvist,Quality (judge),pass,"The phrase fits naturally, is respectful, uses plain language, and is specific to the conversation.",LLM,"Hi Derek,
+
+Thank you again for taking the time to speak with me. What you described about tool health monitoring, especially having no backup coverage and dealing with vacuum pump failures that can scrap entire wafer lots, shaped a lot of how we've approached our research.
+
+We've spent the past few weeks building a solution that speaks directly to that. I'd love 15 minutes to walk you through it and hear your honest reaction as someone who deals with this problem firsthand.
+
+We can be flexible with the schedule. Would either this week or next week work for a short Zoom call?
+
+Thank you for your time,
+Niharika Ahirekar
+Graduate Student
+Rochester Institute of Technology",
+v1,C24,Mei Chen,Router accuracy,pass,"expected first_touch, got first_touch",code,,
+v1,C24,Mei Chen,First-touch compliance,pass,83 words,code,,
+v1,C24,Mei Chen,No wrong-person match,fail,matched a real person,code,,
+v1,C24,Mei Chen,Grounding (judge),pass,"All company claims about Wolfspeed’s fab size and expansion to meet demand in EV, 5G, and renewable-energy are supported by the provided sources.",LLM,,
+v1,C24,Mei Chen,Quality (judge),fail,"The paragraph does not adopt a curious, learning‑oriented tone or ask for a conversation; it states research aims without requesting input, violating the researcher‑tone requirement.",LLM,"Hi Mei,
+
+My name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.
+
+Equipment technicians are the front line where cleanroom processes are validated and maintained, making their function the most direct test of cleanroom operations. Wolfspeed's newly opened 200 mm silicon-carbide wafer fab is the world's largest, and its rapid expansion to meet soaring demand for SiC devices in electric vehicles, 5G and renewable-energy applications creates a cleanroom challenge of preserving ultra-low particle levels at high throughput. Our research aims to understand the tension between rigorous contamination control and the push for faster, high-volume production.
+
+Could I ask you for fifteen minutes later this week or next for a short conversation online?
+
+Best,
+Niharika Ahirekar",
+v1,C25,Jonas Weber,Router accuracy,pass,"expected first_touch, got first_touch",code,,
+v1,C25,Jonas Weber,First-touch compliance,fail,90 words,code,,
+v1,C25,Jonas Weber,No wrong-person match,fail,matched a real person,code,,
+v1,C25,Jonas Weber,Grounding (judge),fail,"The paragraph makes a research‑focus claim that is not supported by any of the provided sources. Unsupported: ['Our research seeks to understand how maintenance-induced downtime is traded off against the pressure for high yield and rapid turnaround in shared, high-precision cleanroom environments.']",LLM,,
+v1,C25,Jonas Weber,Quality (judge),fail,"The paragraph exceeds the word limit, lacks a specific detail about the recipient’s company or role, and does not adopt a curious, request‑oriented tone.",LLM,"Hi Jonas,
+
+My name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.
+
+Maintenance management is where cleanroom operations get tested most directly, because keeping the nanofab's state-of-the-art tools running and the environment particle-free rests on maintenance practices. The Penn State Nanofabrication Laboratory provides a 9,500 sq ft cleanroom and highly skilled technical staff so companies can avoid the expense of owning their own equipment, creating a constant need to balance heavy equipment usage with strict contamination limits. Our research seeks to understand how maintenance-induced downtime is traded off against the pressure for high yield and rapid turnaround in shared, high-precision cleanroom environments.
+
+Could I ask you for fifteen minutes later this week or next for a short conversation online?
+
+Best,
+Niharika Ahirekar",
+v1,C26,Ethan Park,Router accuracy,pass,"expected follow_up, got follow_up",code,,
+v1,C26,Ethan Park,Follow-up format,pass,17-word phrase,code,,
+v1,C26,Ethan Park,Grounding (judge),pass,All details in the phrase are stated or implied by the notes,LLM,,
+v1,C26,Ethan Park,Quality (judge),pass,"The phrase fits naturally, is respectful, uses plain language, and is specific to the conversation.",LLM,"Hi Ethan,
+
+Thank you again for taking the time to speak with me. What you described about paper logging of particle readings, especially the time spent transcribing data and not knowing who reviews it, shaped a lot of how we've approached our research.
+
+We've spent the past few weeks building a solution that speaks directly to that. I'd love 15 minutes to walk you through it and hear your honest reaction as someone who deals with this problem firsthand.
+
+We can be flexible with the schedule. Would either this week or next week work for a short Zoom call?
+
+Thank you for your time,
+Niharika Ahirekar
+Graduate Student
+Rochester Institute of Technology",
+v1,C27,Olivia Grant,Router accuracy,pass,"expected first_touch, got first_touch",code,,
+v1,C27,Olivia Grant,First-touch compliance,pass,62 words,code,,
+v1,C27,Olivia Grant,No wrong-person match,fail,matched a real person,code,,
+v1,C27,Olivia Grant,Grounding (judge),fail,The claim about contamination-control challenges is not directly supported by the provided sources. Unsupported: ['GlobalFoundries creates stringent contamination-control challenges in its cleanrooms'],LLM,,
+v1,C27,Olivia Grant,Quality (judge),fail,"The paragraph does not adopt a curious, learning‑oriented tone or request a conversation; it reads more like a statement rather than a polite inquiry.",LLM,"Hi Olivia,
+
+My name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.
+
+Process engineering is where cleanroom operations are directly exercised, which is why your internship is relevant to my study. GlobalFoundries operates massive cleanrooms, such as the 23,000-sqm facility in Singapore, producing wafers for data-center, automotive and mobile markets, creating stringent contamination-control challenges. Our research seeks to understand how firms balance those contamination controls with sustainability and throughput pressures in high-volume fab environments.
+
+Could I ask you for fifteen minutes later this week or next for a short conversation online?
+
+Best,
+Niharika Ahirekar",
+v1,C28,Ryan Moore,Router accuracy,pass,"expected first_touch, got first_touch",code,,
+v1,C28,Ryan Moore,First-touch compliance,pass,70 words,code,,
+v1,C28,Ryan Moore,No wrong-person match,fail,matched a real person,code,,
+v1,C28,Ryan Moore,Grounding (judge),fail,"These claims are not explicitly stated in the provided sources Unsupported: [""Regener's rapid expansion of biologic manufacturing"", 'creating a high-throughput cleanroom environment']",LLM,,
+v1,C28,Ryan Moore,Quality (judge),fail,"The paragraph lacks a curious, learning‑oriented tone and does not ask for a conversation, violating the researcher tone requirement.",LLM,"Hi Ryan,
+
+My name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.
+
+Lab technicians are the front line where cleanroom protocols are executed and validated, which is why your position is directly relevant to our study. Regeneron's rapid expansion of biologic manufacturing, including new fill-finish facilities and large-scale cell-culture production, relies heavily on clean-room equipment, CIP/SIP processes, and strict contamination control, creating a high-throughput cleanroom environment. Understanding how to maintain sterility while scaling throughput is the trade-off our research aims to characterize.
+
+Could I ask you for fifteen minutes later this week or next for a short conversation online?
+
+Best,
+Niharika Ahirekar",
+v1,C29,Zoe Adeyemi,Router accuracy,pass,"expected follow_up, got follow_up",code,,
+v1,C29,Zoe Adeyemi,Follow-up format,pass,11-word phrase,code,,
+v1,C29,Zoe Adeyemi,Grounding (judge),pass,All details in the phrase are stated or implied by the call notes,LLM,,
+v1,C29,Zoe Adeyemi,Quality (judge),pass,"The phrase fits naturally, is respectful, uses plain language, and is specific enough.",LLM,"Hi Zoe,
+
+It was great meeting you at ALD 2026 in Tampa. What you described about handling experimental samples, especially detecting contamination only after results are returned, shaped a lot of how we've approached our research.
+
+We've spent the past few weeks building a solution that speaks directly to that. I'd love 15 minutes to walk you through it and hear your honest reaction as someone who deals with this problem firsthand.
+
+We can be flexible with the schedule. Would either this week or next week work for a short Zoom call?
+
+Thank you for your time,
+Niharika Ahirekar
+Graduate Student
+Rochester Institute of Technology",
+v1,C30,Liam Foster,Router accuracy,pass,"expected first_touch, got first_touch",code,,
+v1,C30,Liam Foster,First-touch compliance,pass,70 words,code,,
+v1,C30,Liam Foster,No wrong-person match,fail,matched a real person,code,,
+v1,C30,Liam Foster,Grounding (judge),fail,"Several claims about the person's role and cleanroom standards are not backed by the provided sources Unsupported: ['Associate Engineer role', 'Works at the interface where cleanroom protocols are implemented and validated', 'Function is the primary testbed for cleanroom operations', ""Medtronic's California site requires tight particle and microbial control to meet ISO\u202f13485 and FDA standards""]",LLM,,
+v1,C30,Liam Foster,Quality (judge),fail,"The paragraph does not adopt a curious, learning-oriented tone or ask for a conversation, violating the researcher tone requirement.",LLM,"Hi Liam,
+
+My name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.
+
+As an Associate Engineer, you work at the interface where cleanroom protocols are implemented and validated, making your function the primary testbed for cleanroom operations. Medtronic's large California site produces diabetes-treatment devices in dedicated cleanrooms, requiring tight particle and microbial control to meet ISO 13485 and FDA standards. Balancing the rigor of contamination control with the pressure to increase manufacturing throughput is the exact tension our research aims to understand.
+
+Could I ask you for fifteen minutes later this week or next for a short conversation online?
+
+Best,
+Niharika Ahirekar",

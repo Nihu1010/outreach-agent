@@ -11,7 +11,7 @@ C09,Hannah Cole,Facilities Engineer,SkyWater Technology,mid,hannah@skywatertechn
 C10,Omar Haddad,Cleanroom Engineer,Wolfspeed,mid,omar@wolfspeed.example,,,,
 C11,Dr. Elise Fournier,Cleanroom Lab Manager,Westfield University Nanofab,senior,elise@westfielduniversit.example,Elise runs a shared cleanroom with over 200 student users. Students forget gowning steps and contamination is hard to trace to a person or time. Her monitoring budget was cut this year.,phone call,"John Doe, my research partner,",
 C12,Dr. Sam Okafor,"Director, Microfabrication Facility",Penn State Nanofabrication Laboratory,senior,sam@pennstatenanofabri.example,,,,
-C13,Julia Brenner,Lab Manager,Cornell NanoScale Science and Technology Facility,mid,julia@cornellnanoscalesc.example,,,,
+C13,Julia Vandersloot,Lab Manager,Cornell NanoScale Science and Technology Facility,mid,julia@cornellnanoscalesc.example,,,,
 C14,Dr. Arun Mehta,Facility Manager,Riverbend University,senior,arun@riverbenduniversit.example,Arun said ok.,phone call,,
 C15,Claire Dubois,Cleanroom Manager,Minnesota Nano Center,senior,claire@minnesotananocente.example,,,,
 C16,Michael Tanaka,Quality Assurance Manager,Bayside Biologics,senior,michael@baysidebiologics.example,Michael spends about two days before every audit pulling environmental monitoring records into one report. Missing data points have led to audit findings twice. He wants a report he can trust without rebuilding it.,email,,
@@ -28,4 +28,4 @@ C26,Ethan Park,Research Assistant,Westfield University Nanofab,junior,ethan@west
 C27,Olivia Grant,Process Engineering Intern,GlobalFoundries,junior,olivia@globalfoundries.example,,,,
 C28,Ryan Moore,Lab Technician,Regeneron,junior,ryan@regeneron.example,,,,
 C29,Zoe Adeyemi,Graduate Student,Riverbend University,junior,zoe@riverbenduniversit.example,Zoe said her experiments were ruined twice by contamination she found out about only after results came back.,in person,,ALD 2026 in Tampa
-C30,Liam Foster,Associate Engineer,Medtronic,junior,liam@medtronic.example,,,,
+C30,Liam Osterhagen,Associate Engineer,Medtronic,junior,liam@medtronic.example,,,,

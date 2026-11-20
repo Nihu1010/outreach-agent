@@ -1,0 +1,279 @@
+{
+ "C01": {
+  "stage": "first_touch",
+  "subject": "Student research on cleanroom operations",
+  "body": "Hi Dana,\n\nMy name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.\n\nFab management is where cleanroom operations get tested most directly, which is why your role catches my interest. The new Singapore expansion houses a cleanroom of over 23,000\u202fsqm, creating a scale-up challenge for maintaining uniform contamination control across such a large area. Understanding how that scale pressure balances with the need for consistent yield is the tension our research is trying to understand.\n\nCould I ask you for fifteen minutes later this week or next for a short conversation online?\n\nBest,\nNiharika Ahirekar",
+  "run_date": "2026-11-15",
+  "checks_passed": [
+   "First-touch compliance",
+   "Grounding (judge)",
+   "No wrong-person match",
+   "Quality (judge)"
+  ]
+ },
+ "C03": {
+  "stage": "first_touch",
+  "subject": "Student research on cleanroom operations",
+  "body": "Hi Priyanka,\n\nMy name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.\n\nFab management is where cleanroom operations get tested most directly, which is why your role catches my interest. Coherent's plan to expand the world's first 150\u202fmm indium phosphide manufacturing line creates a cleanroom challenge of maintaining ultra-low particle levels while scaling to larger wafer sizes. Understanding how that trade-off between contamination control and throughput drives process decisions is exactly the tension our research is trying to understand.\n\nCould I ask you for fifteen minutes later this week or next for a short conversation online?\n\nBest,\nNiharika Ahirekar",
+  "run_date": "2026-11-15",
+  "checks_passed": [
+   "First-touch compliance",
+   "Grounding (judge)",
+   "No wrong-person match",
+   "Quality (judge)"
+  ]
+ },
+ "C04": {
+  "stage": "follow_up",
+  "subject": "Following up on our conversation",
+  "body": "Hi Tom,\n\nThank you again for taking the time to speak with me. What you described about preventing water damage to tools, especially water from roof drains and HVAC condensate reaching tools, shaped a lot of how we've approached our research.\n\nWe've spent the past few weeks building a solution that speaks directly to that. I'd love 15 minutes to walk you through it and hear your honest reaction as someone who deals with this problem firsthand.\n\nWe can be flexible with the schedule. Would either this week or next week work for a short Zoom call?\n\nThank you for your time,\nNiharika Ahirekar\nGraduate Student\nRochester Institute of Technology",
+  "run_date": "2026-11-15",
+  "checks_passed": [
+   "Follow-up format",
+   "Grounding (judge)",
+   "Quality (judge)"
+  ]
+ },
+ "C07": {
+  "stage": "first_touch",
+  "subject": "Student research on cleanroom operations",
+  "body": "Hi Sofia,\n\nMy name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.\n\nFacilities engineering is where cleanroom operations get tested most concretely, which is why your role catches my interest. Regeneron's deployment of a mobile cGMP gowning cleanroom that had to meet ISO\u202f7 design parameters creates a unique challenge of maintaining aseptic qualification while staying flexible. Understanding how that flexibility trades off against strict contamination control is exactly the tension our research is trying to understand.\n\nCould I ask you for fifteen minutes later this week or next for a short conversation online?\n\nBest,\nNiharika Ahirekar",
+  "run_date": "2026-11-15",
+  "checks_passed": [
+   "First-touch compliance",
+   "Grounding (judge)",
+   "No wrong-person match",
+   "Quality (judge)"
+  ]
+ },
+ "C08": {
+  "stage": "follow_up",
+  "subject": "Following up on our conversation",
+  "body": "Hi Raj,\n\nThank you again for taking the time to speak with me. What you described about particle count monitoring, especially linking counts to room activities and the week-long root-cause reviews caused by fragmented data, shaped a lot of how we've approached our research.\n\nWe've spent the past few weeks building a solution that speaks directly to that. I'd love 15 minutes to walk you through it and hear your honest reaction as someone who deals with this problem firsthand.\n\nWe can be flexible with the schedule. Would either this week or next week work for a short Zoom call?\n\nThank you for your time,\nNiharika Ahirekar\nGraduate Student\nRochester Institute of Technology",
+  "run_date": "2026-11-15",
+  "checks_passed": [
+   "Follow-up format",
+   "Grounding (judge)",
+   "Quality (judge)"
+  ]
+ },
+ "C09": {
+  "stage": "first_touch",
+  "subject": "Student research on cleanroom operations",
+  "body": "Hi Hannah,\n\nMy name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.\n\nFacilities engineering is where cleanroom operations get tested most directly, which is why your role interests me. SkyWater's flagship fab houses a 91,000-sq-ft class\u202f10 cleanroom with SMIF handling, a setup that makes particle control especially tough. Balancing that strict contamination control against the need for high throughput is the tension our research is trying to understand.\n\nCould I ask you for fifteen minutes later this week or next for a short conversation online?\n\nBest,\nNiharika Ahirekar",
+  "run_date": "2026-11-15",
+  "checks_passed": [
+   "First-touch compliance",
+   "Grounding (judge)",
+   "No wrong-person match",
+   "Quality (judge)"
+  ]
+ },
+ "C11": {
+  "stage": "follow_up",
+  "subject": "Following up on our conversation",
+  "body": "Hi Dr. Fournier,\n\nI am Niharika, a graduate student at Rochester Institute of Technology. John Doe, my research partner, told me about the call you two had. What you described about cleanroom gowning process, especially students forgetting steps and contamination that's hard to trace, shaped a lot of how we've approached our research.\n\nWe've spent the past few weeks building a solution that speaks directly to that. I'd love 15 minutes to walk you through it and hear your honest reaction as someone who deals with this problem firsthand.\n\nWe can be flexible with the schedule. Would either this week or next week work for a short Zoom call?\n\nThank you for your time,\nNiharika Ahirekar\nGraduate Student\nRochester Institute of Technology",
+  "run_date": "2026-11-15",
+  "checks_passed": [
+   "Follow-up format",
+   "Grounding (judge)",
+   "Quality (judge)"
+  ]
+ },
+ "C17": {
+  "stage": "first_touch",
+  "subject": "Student research on cleanroom operations",
+  "body": "Hi Grace,\n\nMy name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.\n\nCompliance is where cleanroom operations get examined most closely, which is why your role catches my interest. SkyWater's flagship fab runs a 91,000\u202fsq\u202fft class\u202f10 cleanroom with SMIF handling, creating a challenge to keep strict ISO-4/ISO-5 standards while processing high-volume wafers. Understanding how compliance constraints balance against production throughput is the tension our research aims to explore.\n\nCould I ask you for fifteen minutes later this week or next for a short conversation online?\n\nBest,\nNiharika Ahirekar",
+  "run_date": "2026-11-15",
+  "checks_passed": [
+   "First-touch compliance",
+   "Grounding (judge)",
+   "No wrong-person match",
+   "Quality (judge)"
+  ]
+ },
+ "C18": {
+  "stage": "follow_up",
+  "subject": "Following up on our conversation",
+  "body": "Hi Victor,\n\nThank you again for taking the time to speak with me. What you described about deviation reporting, especially writing reports by hand after each excursion, shaped a lot of how we've approached our research.\n\nWe've spent the past few weeks building a solution that speaks directly to that. I'd love 15 minutes to walk you through it and hear your honest reaction as someone who deals with this problem firsthand.\n\nWe can be flexible with the schedule. Would either this week or next week work for a short Zoom call?\n\nThank you for your time,\nNiharika Ahirekar\nGraduate Student\nRochester Institute of Technology",
+  "run_date": "2026-11-15",
+  "checks_passed": [
+   "Follow-up format",
+   "Grounding (judge)",
+   "Quality (judge)"
+  ]
+ },
+ "C19": {
+  "stage": "first_touch",
+  "subject": "Student research on cleanroom operations",
+  "body": "Hi Nadia,\n\nMy name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.\n\nQuality leadership is where cleanroom operations get tested most concretely, which is why the Quality Director role catches my interest. At Medtronic's biggest California site you produce diabetes-treatment devices alongside labs, offices and call centers, so keeping the cleanroom GMP-compliant amid such mixed-use space is a contamination-control challenge. Balancing that contamination discipline with the need to share facilities and maintain productivity is the tension our research is trying to understand.\n\nCould I ask you for fifteen minutes later this week or next for a short conversation online?\n\nBest,\nNiharika Ahirekar",
+  "run_date": "2026-11-15",
+  "checks_passed": [
+   "First-touch compliance",
+   "Grounding (judge)",
+   "No wrong-person match",
+   "Quality (judge)"
+  ]
+ },
+ "C20": {
+  "stage": "first_touch",
+  "subject": "Student research on cleanroom operations",
+  "body": "Hi Ben,\n\nMy name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.\n\nCompliance work is where cleanroom operations get tested most concretely, which is why your role catches my interest. Coherent's plan to expand the world's first 150\u202fmm indium phosphide manufacturing line inside a state-of-the-art cleanroom creates a unique challenge of maintaining ultra-low particle levels while scaling InP epitaxy. Our research is trying to understand how that particle-control tension balances with the push for higher throughput.\n\nCould I ask you for fifteen minutes later this week or next for a short conversation online?\n\nBest,\nNiharika Ahirekar",
+  "run_date": "2026-11-15",
+  "checks_passed": [
+   "First-touch compliance",
+   "Grounding (judge)",
+   "No wrong-person match",
+   "Quality (judge)"
+  ]
+ },
+ "C21": {
+  "stage": "follow_up",
+  "subject": "Following up on our conversation",
+  "body": "Hi Luis,\n\nThank you again for taking the time to speak with me. What you described about equipment maintenance, especially reacting to tool alarms with no warning before pump or chiller failures, shaped a lot of how we've approached our research.\n\nWe've spent the past few weeks building a solution that speaks directly to that. I'd love 15 minutes to walk you through it and hear your honest reaction as someone who deals with this problem firsthand.\n\nWe can be flexible with the schedule. Would either this week or next week work for a short Zoom call?\n\nThank you for your time,\nNiharika Ahirekar\nGraduate Student\nRochester Institute of Technology",
+  "run_date": "2026-11-15",
+  "checks_passed": [
+   "Follow-up format",
+   "Grounding (judge)",
+   "Quality (judge)"
+  ]
+ },
+ "C23": {
+  "stage": "follow_up",
+  "subject": "Following up on our conversation",
+  "body": "Hi Derek,\n\nThank you again for taking the time to speak with me. What you described about tool health tracking, especially relying on a personal spreadsheet and no one monitoring when the owner is on vacation, shaped a lot of how we've approached our research.\n\nWe've spent the past few weeks building a solution that speaks directly to that. I'd love 15 minutes to walk you through it and hear your honest reaction as someone who deals with this problem firsthand.\n\nWe can be flexible with the schedule. Would either this week or next week work for a short Zoom call?\n\nThank you for your time,\nNiharika Ahirekar\nGraduate Student\nRochester Institute of Technology",
+  "run_date": "2026-11-15",
+  "checks_passed": [
+   "Follow-up format",
+   "Grounding (judge)",
+   "Quality (judge)"
+  ]
+ },
+ "C25": {
+  "stage": "first_touch",
+  "subject": "Student research on cleanroom operations",
+  "body": "Hi Jonas,\n\nMy name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.\n\nMaintenance management is where cleanroom operations get tested, which is why your role interests me. The lab's recent acquisition of an advanced-configuration Temescal electron-beam metallization system pushes the cleanroom to sustain around 10 particles per cubic foot, a strict limit for precise beam deposition. Balancing the intensive maintenance these tools demand with the need to keep the environment ultra-clean is the tension our research seeks to understand.\n\nCould I ask you for fifteen minutes later this week or next for a short conversation online?\n\nBest,\nNiharika Ahirekar",
+  "run_date": "2026-11-15",
+  "checks_passed": [
+   "First-touch compliance",
+   "Grounding (judge)",
+   "No wrong-person match",
+   "Quality (judge)"
+  ]
+ },
+ "C26": {
+  "stage": "follow_up",
+  "subject": "Following up on our conversation",
+  "body": "Hi Ethan,\n\nThank you again for taking the time to speak with me. What you described about manual logging on paper, especially uncertainty about who reviews the logged data, shaped a lot of how we've approached our research.\n\nWe've spent the past few weeks building a solution that speaks directly to that. I'd love 15 minutes to walk you through it and hear your honest reaction as someone who deals with this problem firsthand.\n\nWe can be flexible with the schedule. Would either this week or next week work for a short Zoom call?\n\nThank you for your time,\nNiharika Ahirekar\nGraduate Student\nRochester Institute of Technology",
+  "run_date": "2026-11-15",
+  "checks_passed": [
+   "Follow-up format",
+   "Grounding (judge)",
+   "Quality (judge)"
+  ]
+ },
+ "C27": {
+  "stage": "first_touch",
+  "subject": "Student research on cleanroom operations",
+  "body": "Hi Olivia,\n\nMy name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.\n\nProcess engineering is where cleanroom operations get tested most directly, which is why the intern role interests me. The new Singapore expansion houses a cleanroom of over 23,000\u202fsqm, forcing the fab to balance massive resource-reuse systems with the tight contamination limits such a space demands. Our research is trying to understand how sustainability initiatives trade off against strict yield protection in such large-scale cleanrooms.\n\nCould I ask you for fifteen minutes later this week or next for a short conversation online?\n\nBest,\nNiharika Ahirekar",
+  "run_date": "2026-11-15",
+  "checks_passed": [
+   "First-touch compliance",
+   "Grounding (judge)",
+   "No wrong-person match",
+   "Quality (judge)"
+  ]
+ },
+ "C28": {
+  "stage": "first_touch",
+  "subject": "Student research on cleanroom operations",
+  "body": "Hi Ryan,\n\nMy name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.\n\nLab technicians are where cleanroom operations get exercised day-to-day, which is why your role catches my interest. Regeneron's mobile cGMP gowning cleanroom was built to ISO 7 design parameters to support gowning training and aseptic qualification, creating a tight balance between strict contamination control and flexible staff onboarding. Our research is trying to understand how that trade-off shapes overall cleanroom productivity.\n\nCould I ask you for fifteen minutes later this week or next for a short conversation online?\n\nBest,\nNiharika Ahirekar",
+  "run_date": "2026-11-15",
+  "checks_passed": [
+   "First-touch compliance",
+   "Grounding (judge)",
+   "No wrong-person match",
+   "Quality (judge)"
+  ]
+ },
+ "C29": {
+  "stage": "follow_up",
+  "subject": "Following up on our conversation",
+  "body": "Hi Zoe,\n\nIt was great meeting you at ALD 2026 in Tampa. What you described about experiment contamination, especially discovering it only after results are returned, shaped a lot of how we've approached our research.\n\nWe've spent the past few weeks building a solution that speaks directly to that. I'd love 15 minutes to walk you through it and hear your honest reaction as someone who deals with this problem firsthand.\n\nWe can be flexible with the schedule. Would either this week or next week work for a short Zoom call?\n\nThank you for your time,\nNiharika Ahirekar\nGraduate Student\nRochester Institute of Technology",
+  "run_date": "2026-11-15",
+  "checks_passed": [
+   "Follow-up format",
+   "Grounding (judge)",
+   "Quality (judge)"
+  ]
+ },
+ "C02": {
+  "stage": "follow_up",
+  "subject": "Following up on our conversation",
+  "body": "Hi Marco,\n\nI am Niharika, a graduate student at Rochester Institute of Technology. John Doe, my research partner, told me about the conversation you two had at ALD 2026 in Tampa. What you described about fab monitoring, especially delayed leak detection and having to manually inspect the sub-fab every Friday, shaped a lot of how we've approached our research.\n\nWe've spent the past few weeks building a solution that speaks directly to that. I'd love 15 minutes to walk you through it and hear your honest reaction as someone who deals with this problem firsthand.\n\nWe can be flexible with the schedule. Would either this week or next week work for a short Zoom call?\n\nThank you for your time,\nNiharika Ahirekar\nGraduate Student\nRochester Institute of Technology",
+  "run_date": "2026-11-12",
+  "checks_passed": [
+   "Follow-up format",
+   "Grounding (judge)",
+   "Quality (judge)"
+  ]
+ },
+ "C06": {
+  "stage": "follow_up",
+  "subject": "Following up on our conversation",
+  "body": "Hi Kevin,\n\nIt was great meeting you at the SEMICON West career fair. What you described about manual spreadsheet exports from three systems each morning, especially delayed detection of excursions and HVAC filter change spikes, shaped a lot of how we've approached our research.\n\nWe've spent the past few weeks building a solution that speaks directly to that. I'd love 15 minutes to walk you through it and hear your honest reaction as someone who deals with this problem firsthand.\n\nWe can be flexible with the schedule. Would either this week or next week work for a short Zoom call?\n\nThank you for your time,\nNiharika Ahirekar\nGraduate Student\nRochester Institute of Technology",
+  "run_date": "2026-11-12",
+  "checks_passed": [
+   "Follow-up format",
+   "Grounding (judge)",
+   "Quality (judge)"
+  ]
+ },
+ "C10": {
+  "stage": "first_touch",
+  "subject": "Student research on cleanroom operations",
+  "body": "Hi Omar,\n\nMy name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.\n\nCleanroom engineering is where cleanroom operations get tested most directly, which is why your role catches my attention. Wolfspeed's newly opened 200\u202fmm silicon-carbide fab in Marcy, New York pushes the limits of particle-free processing for high-purity SiC wafers, creating a cleanroom challenge around maintaining contamination control at that wafer size. Understanding how to balance strict contamination limits with the throughput demands of such a large-scale SiC line is the tension our research is trying to understand.\n\nCould I ask you for fifteen minutes later this week or next for a short conversation online?\n\nBest,\nNiharika Ahirekar",
+  "run_date": "2026-11-12",
+  "checks_passed": [
+   "First-touch compliance",
+   "Grounding (judge)",
+   "No wrong-person match",
+   "Quality (judge)"
+  ]
+ },
+ "C12": {
+  "stage": "first_touch",
+  "subject": "Student research on cleanroom operations",
+  "body": "Hi Dr. Okafor,\n\nMy name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.\n\nMicrofabrication facility leadership is where cleanroom operations get tested most directly, which is why the Director role interests me. Penn State's Nanofabrication Lab recently ordered an advanced-configuration Temescal electron-beam metallization system, a tool that pushes particle-count limits in a space that already boasts only about ten particles per cubic foot. Our research is trying to understand the trade-off between enabling such high-precision, non-standard processes and preserving that ultra-clean environment.\n\nCould I ask you for fifteen minutes later this week or next for a short conversation online?\n\nBest,\nNiharika Ahirekar",
+  "run_date": "2026-11-12",
+  "checks_passed": [
+   "First-touch compliance",
+   "Grounding (judge)",
+   "No wrong-person match",
+   "Quality (judge)"
+  ]
+ },
+ "C15": {
+  "stage": "first_touch",
+  "subject": "Student research on cleanroom operations",
+  "body": "Hi Claire,\n\nMy name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.\n\nCleanroom management is where cleanroom operations get tested most directly, which is why your role interests me. The Minnesota Nano Center's 8,000-square-foot Class\u202f100 cleanroom forces researchers to keep particle counts under one hundred per cubic foot while handling a wide variety of nanofabrication tools. Understanding how that particle-control requirement balances against the need for flexible, multi-disciplinary experiments is the tension our research is trying to understand.\n\nCould I ask you for fifteen minutes later this week or next for a short conversation online?\n\nBest,\nNiharika Ahirekar",
+  "run_date": "2026-11-12",
+  "checks_passed": [
+   "First-touch compliance",
+   "Grounding (judge)",
+   "No wrong-person match",
+   "Quality (judge)"
+  ]
+ },
+ "C16": {
+  "stage": "follow_up",
+  "subject": "Following up on our conversation",
+  "body": "Hi Michael,\n\nThank you again for taking the time to speak with me. What you described about compiling environmental monitoring records, especially missing data points that have caused audit findings twice, shaped a lot of how we've approached our research.\n\nWe've spent the past few weeks building a solution that speaks directly to that. I'd love 15 minutes to walk you through it and hear your honest reaction as someone who deals with this problem firsthand.\n\nWe can be flexible with the schedule. Would either this week or next week work for a short Zoom call?\n\nThank you for your time,\nNiharika Ahirekar\nGraduate Student\nRochester Institute of Technology",
+  "run_date": "2026-11-12",
+  "checks_passed": [
+   "Follow-up format",
+   "Grounding (judge)",
+   "Quality (judge)"
+  ]
+ }
+}

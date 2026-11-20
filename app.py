@@ -1,6 +1,7 @@
 """Outreach Agent MVP: Streamlit UI."""
 import csv
 import difflib
+import json
 import os
 import time
 from datetime import datetime
@@ -27,14 +28,28 @@ for key in ("LLM_PROVIDER", "GROQ_API_KEY", "GROQ_MODEL", "ANTHROPIC_API_KEY", "
     except Exception:
         pass
 
-from agent import key_env, model, provider, run_contact  # noqa: E402
+from agent import Result, key_env, model, provider, run_contact  # noqa: E402
 from tracing import init_tracing  # noqa: E402
 
 KEY_NAME = key_env()
 KEY_LABEL = {"groq": "Groq", "anthropic": "Anthropic", "openai": "OpenAI"}[provider()]
 
 tracing_on = init_tracing()
+DEFAULT_SENDER = "Niharika Ahirekar"
+MAX_LIVE_PER_SESSION = 8  # new live drafts per visitor; cached drafts don't count
+EXAMPLES_PATH = ROOT / "data" / "examples.json"
+EXAMPLES = json.loads(EXAMPLES_PATH.read_text()) if EXAMPLES_PATH.exists() else {}
+
+
+@st.cache_data(ttl=7 * 24 * 3600, max_entries=500, show_spinner=False)
+def cached_run(contact_json: str, topic: str, sender: str, override):
+    """Same contact + notes + sender = same draft for every visitor, without spending API tokens again."""
+    return run_contact(json.loads(contact_json), topic, sender, override)
+
+
 ss = st.session_state
+ss.setdefault("live_keys", set())
+ss.setdefault("saved_note", "")
 ss.setdefault("result", None)
 ss.setdefault("started", None)
 ss.setdefault("log", [])
@@ -42,7 +57,7 @@ ss.setdefault("log", [])
 # ---------- Sidebar ----------
 with st.sidebar:
     st.header("Settings")
-    sender = st.text_input("Your name (signs the email)", "Niharika Ahirekar")
+    sender = st.text_input("Your name (signs the email)", DEFAULT_SENDER)
     topic = "cleanroom operations"  # only used if your template contains {topic}
     if not os.getenv(KEY_NAME):
         key = st.text_input(f"{KEY_LABEL} API key", type="password", help="Not stored. Needed to write drafts.")
@@ -52,7 +67,7 @@ with st.sidebar:
         tkey = st.text_input("Tavily API key (web research)", type="password", help="Free at tavily.com. Not stored.")
         if tkey:
             os.environ["TAVILY_API_KEY"] = tkey
-    st.caption(f"Model: {model()} \n Tracing: {'on (Phoenix)' if tracing_on else 'off'}")
+    st.caption(f"Model: {model()}  \nTracing: {'on (Phoenix)' if tracing_on else 'off'}")
 
 st.title("Outreach Agent")
 st.caption("First touch: the agent researches the person and company, then writes why their role matters to your research. "
@@ -113,26 +128,69 @@ stage_choice = st.radio("Email type", ["Auto", "First touch", "Follow-up"], hori
                         help="Auto: no notes = first touch, notes = follow-up.")
 override = {"Auto": None, "First touch": "first_touch", "Follow-up": "follow_up"}[stage_choice]
 
-if st.button("Generate draft", type="primary"):
+def saved_example():
+    """A real draft from an eval run that passed every check, for the unchanged sample contact."""
+    ex = EXAMPLES.get(contact["contact_id"])
+    original_notes = str(df.iloc[idx]["call_notes"])
+    if upload is None and ex and notes == original_notes and override is None and sender == DEFAULT_SENDER:
+        return ex
+    return None
+
+
+def show_saved(ex, reason):
+    ss.result = Result(ex["stage"], ex["subject"], ex["body"])
+    ss.saved_note = (f"{reason}This is a verified draft for this contact from the evaluation run on {ex['run_date']}. "
+                     f"It passed all {len(ex['checks_passed'])} automated checks.")
+    ss.started = time.time()
+    ss.contact_id = contact["contact_id"]
+
+
+col1, col2 = st.columns([1, 1])
+generate = col1.button("Generate draft", type="primary")
+example = saved_example()
+if example and col2.button("See a saved example (instant)"):
+    show_saved(example, "")
+
+if generate:
+    contact_json = json.dumps({k: str(v) for k, v in contact.items()}, sort_keys=True)
+    key = (contact_json, sender, override)
     if not os.getenv(KEY_NAME):
         st.error(f"Add a {KEY_LABEL} API key in the sidebar.")
+    elif key not in ss.live_keys and len(ss.live_keys) >= MAX_LIVE_PER_SESSION:
+        if example:
+            show_saved(example, "")
+        else:
+            st.info("You've explored plenty of live drafts on this visit. Pick a sample contact to see a verified draft, "
+                    "or revisit any contact you've already generated.")
     else:
         try:
             with st.spinner("Researching and drafting..."):
-                ss.result = run_contact(contact, topic, sender, override)
+                ss.result = cached_run(contact_json, topic, sender, override)
+                ss.live_keys.add(key)
+                ss.saved_note = ""
                 ss.started = time.time()
                 ss.contact_id = contact["contact_id"]
         except Exception as e:
-            ss.result = None
-            st.error("Couldn't draft right now. Try again.")
-            with st.expander("Details (for debugging)"):
-                st.code(f"{type(e).__name__}: {str(e)[:500]}", language=None)
+            limited = any(k in str(e).lower() for k in ("429", "rate limit", "blocked_api_access", "spend limit"))
+            if limited and example:
+                show_saved(example, "")
+            else:
+                ss.result = None
+                if limited:
+                    st.info("The live model is busy right now. Try again in a few minutes, "
+                            "or pick a sample contact to see a verified draft instantly.")
+                else:
+                    st.error("Couldn't draft right now. Try again.")
+                    with st.expander("Details (for debugging)"):
+                        st.code(f"{type(e).__name__}: {str(e)[:500]}", language=None)
 
 # ---------- 3. Review ----------
 res = ss.result
 if res and ss.get("contact_id") == contact["contact_id"]:
     badge = "First touch · researched" if res.stage == "first_touch" else "Follow-up · from call notes"
-    st.subheader(badge)
+    st.subheader(badge + (" · saved example" if ss.saved_note else ""))
+    if ss.saved_note:
+        st.info(ss.saved_note.strip())
 
     if res.message:
         st.info(res.message)

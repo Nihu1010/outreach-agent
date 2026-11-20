@@ -1,0 +1,420 @@
+version,contact_id,name,eval,result,detail,judge,draft,your_label
+round3-b,C01,Dana Whitlock,Router accuracy,pass,"expected first_touch, got first_touch",code,,
+round3-b,C01,Dana Whitlock,First-touch compliance,pass,60 words,code,,
+round3-b,C01,Dana Whitlock,No wrong-person match,pass,none matched,code,,
+round3-b,C01,Dana Whitlock,Grounding (judge),pass,All factual claims in the paragraph are supported by the provided sources.,LLM,,
+round3-b,C01,Dana Whitlock,Quality (judge),pass,"The paragraph meets all criteria: it reads conversationally, mentions the 23,000 sqm cleanroom, is curious and respectful, and is 60 words long.",LLM,"Hi Dana,
+
+My name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.
+
+Fab management is where cleanroom operations get tested most directly, which is why your role interests me. The new facility spans a cleanroom space of over 23,000 sqm, so I imagine coordinating that scale creates a constant balance between throughput and contamination control. Our research is trying to understand how managers negotiate that trade-off between productivity and strict cleanroom discipline.
+
+Could I ask you for fifteen minutes later this week or next for a short conversation online?
+
+Best,
+Niharika Ahirekar",
+round3-b,C02,Marco Ibarra,Router accuracy,pass,"expected follow_up, got follow_up",code,,
+round3-b,C02,Marco Ibarra,Follow-up format,pass,11-word phrase,code,,
+round3-b,C02,Marco Ibarra,Grounding (judge),pass,The phrase accurately reflects the call notes without adding unsupported details.,LLM,,
+round3-b,C02,Marco Ibarra,Quality (judge),pass,"The phrase reads naturally, respectfully highlights a specific challenge, uses plain language, and is specific enough for the recipient to recognize the conversation.",LLM,"Hi Marco,
+
+I am Niharika, a graduate student at Rochester Institute of Technology. John Doe, my research partner, told me about the conversation you two had at ALD 2026 in Tampa. What you described about fab operations, especially delayed leak detection and manual friday sub-fab inspections, shaped a lot of how we've approached our research.
+
+We've spent the past few weeks building a solution that speaks directly to that. I'd love 15 minutes to walk you through it and hear your honest reaction as someone who deals with this problem firsthand.
+
+We can be flexible with the schedule. Would either this week or next week work for a short Zoom call?
+
+Thank you for your time,
+Niharika Ahirekar
+Graduate Student
+Rochester Institute of Technology",
+round3-b,C03,Priyanka Wexholm,Router accuracy,pass,"expected first_touch, got first_touch",code,,
+round3-b,C03,Priyanka Wexholm,First-touch compliance,pass,68 words,code,,
+round3-b,C03,Priyanka Wexholm,No wrong-person match,pass,none matched,code,,
+round3-b,C03,Priyanka Wexholm,Grounding (judge),pass,All factual claims in the paragraph are supported by the provided sources.,LLM,,
+round3-b,C03,Priyanka Wexholm,Quality (judge),pass,"The paragraph meets all criteria: it reads thoughtfully, mentions the specific 150 mm Indium Phosphide line, uses a curious and respectful tone, and is clear, grammatical, and 68 words long.",LLM,"Hi Priyanka,
+
+My name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.
+
+Fab management is where cleanroom operations get tested most directly, which is why your role interests me. The ""world's first 150 mm Indium Phosphide Manufacturing Line"" is being expanded in a state-of-the-art cleanroom, and I imagine scaling that line creates tight particle-control constraints that could impact throughput. Our research is trying to understand how facilities balance the need for ultra-low contamination with the pressure to increase production speed.
+
+Could I ask you for fifteen minutes later this week or next for a short conversation online?
+
+Best,
+Niharika Ahirekar",
+round3-b,C04,Tom Reinholt,Router accuracy,pass,"expected follow_up, got follow_up",code,,
+round3-b,C04,Tom Reinholt,Follow-up format,pass,13-word phrase,code,,
+round3-b,C04,Tom Reinholt,Grounding (judge),pass,"The phrase accurately reflects Tom’s concern about water from roof drains and HVAC condensate reaching tools, with no added details or changes.",LLM,,
+round3-b,C04,Tom Reinholt,Quality (judge),pass,"The phrase reads naturally, respectfully addresses a challenge, uses plain language, and is specific enough for the person to recognize their own conversation.",LLM,"Hi Tom,
+
+Thank you again for taking the time to speak with me. What you described about protecting tools from water damage, especially water from roof drains and HVAC condensate, shaped a lot of how we've approached our research.
+
+We've spent the past few weeks building a solution that speaks directly to that. I'd love 15 minutes to walk you through it and hear your honest reaction as someone who deals with this problem firsthand.
+
+We can be flexible with the schedule. Would either this week or next week work for a short Zoom call?
+
+Thank you for your time,
+Niharika Ahirekar
+Graduate Student
+Rochester Institute of Technology",
+round3-b,C05,Lena Ostrowski,Router accuracy,pass,"expected first_touch, got first_touch",code,,
+round3-b,C05,Lena Ostrowski,First-touch compliance,pass,61 words,code,,
+round3-b,C05,Lena Ostrowski,No wrong-person match,pass,none matched,code,,
+round3-b,C05,Lena Ostrowski,Grounding (judge),pass,All factual claims are supported by the provided sources.,LLM,,
+round3-b,C05,Lena Ostrowski,Quality (judge),pass,"The paragraph meets all criteria: it reads conversationally, mentions a specific detail about onsemi’s 19 manufacturing centers in 9 countries, uses a curious and respectful tone without sales language, and is clear, grammatical, and 61 words long.",LLM,"Hi Lena,
+
+My name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.
+
+Fab management is where cleanroom operations get tested most directly, which is why your role catches my interest. onsemi's network includes 19 manufacturing centers in 9 countries, which I imagine creates a challenge of keeping contamination control consistent across geographically dispersed fabs. Balancing that consistency with the pressure to ramp yield quickly is the tension our research is trying to understand.
+
+Could I ask you for fifteen minutes later this week or next for a short conversation online?
+
+Best,
+Niharika Ahirekar",
+round3-b,C06,Kevin Mbeki,Router accuracy,pass,"expected follow_up, got follow_up",code,,
+round3-b,C06,Kevin Mbeki,Follow-up format,pass,14-word phrase,code,,
+round3-b,C06,Kevin Mbeki,Grounding (judge),pass,The phrase accurately reflects the call notes without adding unsupported details.,LLM,,
+round3-b,C06,Kevin Mbeki,Quality (judge),pass,"The phrase reads naturally, respectfully highlights a specific challenge, uses plain language, and is detailed enough for the recipient to recognize the conversation.",LLM,"Hi Kevin,
+
+It was great meeting you at the SEMICON West career fair. What you described about manual export of particle-counter logs, especially exporting spreadsheets from three separate systems every morning, shaped a lot of how we've approached our research.
+
+We've spent the past few weeks building a solution that speaks directly to that. I'd love 15 minutes to walk you through it and hear your honest reaction as someone who deals with this problem firsthand.
+
+We can be flexible with the schedule. Would either this week or next week work for a short Zoom call?
+
+Thank you for your time,
+Niharika Ahirekar
+Graduate Student
+Rochester Institute of Technology",
+round3-b,C07,Sofia Alvarez,Router accuracy,pass,"expected first_touch, got first_touch",code,,
+round3-b,C07,Sofia Alvarez,First-touch compliance,pass,69 words,code,,
+round3-b,C07,Sofia Alvarez,No wrong-person match,pass,none matched,code,,
+round3-b,C07,Sofia Alvarez,Grounding (judge),pass,All factual claims in the paragraph are supported by the provided sources.,LLM,,
+round3-b,C07,Sofia Alvarez,Quality (judge),pass,"The paragraph meets all criteria: it reads as thoughtful, includes a specific detail about Regeneron’s use of Germfree’s mobile cGMP cleanroom, is curious and respectful, and is clear, grammatical, and 69 words long.",LLM,"Hi Sofia,
+
+My name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.
+
+Facilities engineering is where cleanroom operations get tested, so your role interests me. Regeneron Pharmaceuticals turned to Germfree's team of experts for a mobile cGMP gowning cleanroom that met ISO 7 design parameters and supported gowning training and aseptic qualification, which I imagine creates tight space and rapid turnover challenges. Our research is trying to understand the trade-off between the flexibility of mobile cleanrooms and maintaining consistent aseptic performance.
+
+Could I ask you for fifteen minutes later this week or next for a short conversation online?
+
+Best,
+Niharika Ahirekar",
+round3-b,C08,Raj Kulkarni,Router accuracy,pass,"expected follow_up, got follow_up",code,,
+round3-b,C08,Raj Kulkarni,Follow-up format,pass,15-word phrase,code,,
+round3-b,C08,Raj Kulkarni,Grounding (judge),fail,"The phrase adds details not present in the notes. Unsupported: ['tracking particle counts', 'consolidating data']",LLM,,
+round3-b,C08,Raj Kulkarni,Quality (judge),pass,"The phrase reads naturally, is respectful, uses plain language, and is specific enough for the person to recognize their conversation.",LLM,"Hi Raj,
+
+Thank you again for taking the time to speak with me. What you described about tracking particle counts, especially linking counts to room events and consolidating data for root-cause reviews, shaped a lot of how we've approached our research.
+
+We've spent the past few weeks building a solution that speaks directly to that. I'd love 15 minutes to walk you through it and hear your honest reaction as someone who deals with this problem firsthand.
+
+We can be flexible with the schedule. Would either this week or next week work for a short Zoom call?
+
+Thank you for your time,
+Niharika Ahirekar
+Graduate Student
+Rochester Institute of Technology",
+round3-b,C09,Hannah Cole,Router accuracy,pass,"expected first_touch, got first_touch",code,,
+round3-b,C09,Hannah Cole,First-touch compliance,pass,71 words,code,,
+round3-b,C09,Hannah Cole,No wrong-person match,pass,none matched,code,,
+round3-b,C09,Hannah Cole,Grounding (judge),pass,All factual claims in the paragraph are supported by the provided sources.,LLM,,
+round3-b,C09,Hannah Cole,Quality (judge),pass,"The paragraph meets all criteria: it reads as thoughtful, includes a specific detail about SkyWater’s 91,000‑sq‑ft cleanroom, is curious and respectful, and is clear, grammatical, and 71 words long.",LLM,"Hi Hannah,
+
+My name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.
+
+Facilities engineering is where cleanroom operations get exercised most directly, which is why your role catches my interest. I noticed SkyWater's flagship fab includes a 91,000 sq ft cleanroom (class 10 + SMIF), which I imagine creates a tricky balance between maintaining ultra-low particle levels and supporting flexible SMIF handling. Understanding how facilities teams trade off contamination control against equipment accessibility is exactly the tension our research is trying to understand.
+
+Could I ask you for fifteen minutes later this week or next for a short conversation online?
+
+Best,
+Niharika Ahirekar",
+round3-b,C10,Omar Haddad,Router accuracy,pass,"expected first_touch, got first_touch",code,,
+round3-b,C10,Omar Haddad,First-touch compliance,pass,77 words,code,,
+round3-b,C10,Omar Haddad,No wrong-person match,pass,none matched,code,,
+round3-b,C10,Omar Haddad,Grounding (judge),pass,All factual claims are supported by the provided sources.,LLM,,
+round3-b,C10,Omar Haddad,Quality (judge),pass,"The paragraph meets all criteria: it reads as thoughtful, mentions the 200 mm silicon‑carbide process, uses a curious and respectful tone, and is clear, grammatical, and 76 words long.",LLM,"Hi Omar,
+
+My name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.
+
+Cleanroom engineering is where the practical limits of Wolfspeed's silicon-carbide and RF device production are felt most directly, which is why your role catches my attention. I noticed the fab uses a 200 mm silicon-carbide process, which I imagine creates a tight balance between particle-free environments and the high-temperature steps needed for those devices. Our research is trying to understand how facilities trade off contamination control with the thermal and mechanical stresses inherent in scaling such processes.
+
+Could I ask you for fifteen minutes later this week or next for a short conversation online?
+
+Best,
+Niharika Ahirekar",
+round3-b,C11,Dr. Elise Fournier,Router accuracy,pass,"expected follow_up, got follow_up",code,,
+round3-b,C11,Dr. Elise Fournier,Follow-up format,pass,12-word phrase,code,,
+round3-b,C11,Dr. Elise Fournier,Grounding (judge),pass,The phrase accurately reflects the call notes without adding unsupported details.,LLM,,
+round3-b,C11,Dr. Elise Fournier,Quality (judge),pass,"The phrase reads naturally, respectfully highlights a challenge, uses plain language, and is specific enough for the recipient to recognize the context.",LLM,"Hi Dr. Fournier,
+
+I am Niharika, a graduate student at Rochester Institute of Technology. John Doe, my research partner, told me about the call you two had. What you described about cleanroom gowning, especially students forgetting steps and contamination that's hard to trace, shaped a lot of how we've approached our research.
+
+We've spent the past few weeks building a solution that speaks directly to that. I'd love 15 minutes to walk you through it and hear your honest reaction as someone who deals with this problem firsthand.
+
+We can be flexible with the schedule. Would either this week or next week work for a short Zoom call?
+
+Thank you for your time,
+Niharika Ahirekar
+Graduate Student
+Rochester Institute of Technology",
+round3-b,C12,Dr. Sam Okafor,Router accuracy,pass,"expected first_touch, got first_touch",code,,
+round3-b,C12,Dr. Sam Okafor,First-touch compliance,pass,67 words,code,,
+round3-b,C12,Dr. Sam Okafor,No wrong-person match,pass,none matched,code,,
+round3-b,C12,Dr. Sam Okafor,Grounding (judge),fail,"The paragraph contains claims about managing the cleanroom footprint and balancing material work with particle limits that are not supported by the provided sources. Unsupported: ['Lab space within the 9,500 sq. ft. Nanofab Cleanroom I imagine managing that footprint while supporting dozens of material processes creates a scheduling and contamination control challenge.', 'Balancing the need for flexible, non-standard material work with strict particle-count limits is the trade-off our research is trying to understand.']",LLM,,
+round3-b,C12,Dr. Sam Okafor,Quality (judge),pass,"The paragraph meets all criteria: it reads thoughtfully, references the 9,500‑sq‑ft Nanofab Cleanroom, maintains a respectful researcher tone, and is clear, grammatical, and 67 words long.",LLM,"Hi Dr. Okafor,
+
+My name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.
+
+Microfabrication facility leadership is where cleanroom operations get tested most directly, which is why your director role interests me. Lab space within the 9,500 sq. ft. Nanofab Cleanroom I imagine managing that footprint while supporting dozens of material processes creates a scheduling and contamination control challenge. Balancing the need for flexible, non-standard material work with strict particle-count limits is the trade-off our research is trying to understand.
+
+Could I ask you for fifteen minutes later this week or next for a short conversation online?
+
+Best,
+Niharika Ahirekar",
+round3-b,C13,Julia Brenner,Router accuracy,pass,"expected first_touch, got first_touch",code,,
+round3-b,C13,Julia Brenner,First-touch compliance,pass,70 words,code,,
+round3-b,C13,Julia Brenner,No wrong-person match,pass,none matched,code,,
+round3-b,C13,Julia Brenner,Grounding (judge),pass,All factual claims in the paragraph are supported by the provided sources.,LLM,,
+round3-b,C13,Julia Brenner,Quality (judge),pass,"The paragraph meets all criteria: it reads as thoughtful, includes a specific detail about the CNF’s NSF origins and funding, uses a curious and respectful tone without sales language, and is clear, grammatical, and 70 words long.",LLM,"Hi Julia,
+
+My name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.
+
+Lab management is where cleanroom work gets tested, so your role catches my interest. The CNF was started as part of a National Science Foundation initiative in 1977, and has subsequently been partially supported by several other NSF programs, which I imagine makes it tricky to keep the cleanroom environment cutting-edge while relying on research funds. Our research is trying to understand how facilities negotiate that funding-stability versus cleanliness trade-off.
+
+Could I ask you for fifteen minutes later this week or next for a short conversation online?
+
+Best,
+Niharika Ahirekar",
+round3-b,C14,Dr. Arun Mehta,Router accuracy,pass,"expected follow_up, got follow_up",code,,
+round3-b,C14,Dr. Arun Mehta,Refuses thin notes,pass,"Not enough detail in the call notes. Add what they said about their work, then try again.",code,,
+round3-b,C15,Claire Dubois,Router accuracy,pass,"expected first_touch, got first_touch",code,,
+round3-b,C15,Claire Dubois,First-touch compliance,pass,70 words,code,,
+round3-b,C15,Claire Dubois,No wrong-person match,pass,none matched,code,,
+round3-b,C15,Claire Dubois,Grounding (judge),pass,All factual claims in the paragraph are supported by the provided sources.,LLM,,
+round3-b,C15,Claire Dubois,Quality (judge),pass,"The paragraph meets all criteria: it reads as thoughtful, includes a specific detail about Keller and PAN Labs, uses a curious and respectful tone without sales language, and is clear, grammatical, and 70 words long.",LLM,"Hi Claire,
+
+My name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.
+
+Cleanroom management is where cleanroom operations get tested most directly, which is why your role interests me. The Keller and PAN Labs combine to offer 8,000 square feet of Class 100 cleanroom space, and I imagine coordinating that large, ultra-clean area creates a tricky balance between strict particle limits and diverse user needs. Our research is trying to understand how facilities negotiate that trade-off between contamination control and experimental flexibility.
+
+Could I ask you for fifteen minutes later this week or next for a short conversation online?
+
+Best,
+Niharika Ahirekar",
+round3-b,C16,Michael Tanaka,Router accuracy,pass,"expected follow_up, got follow_up",code,,
+round3-b,C16,Michael Tanaka,Follow-up format,pass,12-word phrase,code,,
+round3-b,C16,Michael Tanaka,Grounding (judge),pass,The phrase accurately reflects the call notes without adding unsupported details.,LLM,,
+round3-b,C16,Michael Tanaka,Quality (judge),pass,"The phrase reads naturally, respectfully highlights a challenge, uses plain language, and is specific enough for the recipient to recognize the context.",LLM,"Hi Michael,
+
+Thank you again for taking the time to speak with me. What you described about compiling environmental monitoring records, especially missing data points that cause audit findings, shaped a lot of how we've approached our research.
+
+We've spent the past few weeks building a solution that speaks directly to that. I'd love 15 minutes to walk you through it and hear your honest reaction as someone who deals with this problem firsthand.
+
+We can be flexible with the schedule. Would either this week or next week work for a short Zoom call?
+
+Thank you for your time,
+Niharika Ahirekar
+Graduate Student
+Rochester Institute of Technology",
+round3-b,C17,Grace Thornquist,Router accuracy,pass,"expected first_touch, got first_touch",code,,
+round3-b,C17,Grace Thornquist,First-touch compliance,pass,66 words,code,,
+round3-b,C17,Grace Thornquist,No wrong-person match,pass,none matched,code,,
+round3-b,C17,Grace Thornquist,Grounding (judge),pass,All factual claims are supported by the provided sources.,LLM,,
+round3-b,C17,Grace Thornquist,Quality (judge),pass,"The paragraph meets all criteria: it reads thoughtfully, mentions the 91,000 sq ft cleanroom detail, uses a curious and respectful tone, and is clear, grammatical, and 66 words long.",LLM,"Hi Grace,
+
+My name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.
+
+Compliance is where cleanroom operations get tested most directly, which is why your role interests me. The fab includes a 91,000 sq ft cleanroom (class 10 + SMIF), and I imagine maintaining class-10 conditions across that space creates a tough balance between particle control and equipment throughput. Our research is trying to understand how strict compliance requirements trade off with the need for faster manufacturing cycles.
+
+Could I ask you for fifteen minutes later this week or next for a short conversation online?
+
+Best,
+Niharika Ahirekar",
+round3-b,C18,Victor Santos,Router accuracy,pass,"expected follow_up, got follow_up",code,,
+round3-b,C18,Victor Santos,Follow-up format,pass,17-word phrase,code,,
+round3-b,C18,Victor Santos,Grounding (judge),fail,The phrase adds details about paperwork slowing the process and risking errors that are not present in the call notes. Unsupported: ['especially the manual paperwork that slows the process and risks errors'],LLM,,
+round3-b,C18,Victor Santos,Quality (judge),pass,"The phrase reads naturally, is respectful, uses plain language, and is specific enough for the person to recognize their own conversation.",LLM,"Hi Victor,
+
+Thank you again for taking the time to speak with me. What you described about handwritten deviation reports after each excursion, especially the manual paperwork that slows the process and risks errors, shaped a lot of how we've approached our research.
+
+We've spent the past few weeks building a solution that speaks directly to that. I'd love 15 minutes to walk you through it and hear your honest reaction as someone who deals with this problem firsthand.
+
+We can be flexible with the schedule. Would either this week or next week work for a short Zoom call?
+
+Thank you for your time,
+Niharika Ahirekar
+Graduate Student
+Rochester Institute of Technology",
+round3-b,C19,Nadia Petrova,Router accuracy,pass,"expected first_touch, got first_touch",code,,
+round3-b,C19,Nadia Petrova,First-touch compliance,pass,61 words,code,,
+round3-b,C19,Nadia Petrova,No wrong-person match,pass,none matched,code,,
+round3-b,C19,Nadia Petrova,Grounding (judge),pass,All claims in the paragraph are supported by the provided sources.,LLM,,
+round3-b,C19,Nadia Petrova,Quality (judge),pass,"The paragraph meets all criteria: it reads conversationally, mentions a specific detail about the recipient’s cleanroom GMP compliance, uses a curious and respectful tone, and is clear, grammatical, and 61 words long.",LLM,"Hi Nadia,
+
+My name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.
+
+Quality direction is where cleanroom operations get tested most directly, which is why your role interests me. Your site's focus on cleanroom complying to GMP standards suggests a constant balancing act between strict compliance and production throughput, which I imagine creates a tough trade-off. Our research is trying to understand how teams negotiate that tension between contamination control and manufacturing speed.
+
+Could I ask you for fifteen minutes later this week or next for a short conversation online?
+
+Best,
+Niharika Ahirekar",
+round3-b,C20,Ben Archer,Router accuracy,pass,"expected first_touch, got first_touch",code,,
+round3-b,C20,Ben Archer,First-touch compliance,pass,64 words,code,,
+round3-b,C20,Ben Archer,No wrong-person match,pass,none matched,code,,
+round3-b,C20,Ben Archer,Grounding (judge),pass,All factual claims in the paragraph are supported by the provided sources.,LLM,,
+round3-b,C20,Ben Archer,Quality (judge),pass,"The paragraph meets all criteria: it reads as thoughtful, includes a specific detail about Coherent’s cleanroom expansion, uses a curious and respectful tone without sales language, and is clear, grammatical, and 64 words long.",LLM,"Hi Ben,
+
+My name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.
+
+Compliance management is where cleanroom operations get tested most directly, which is why your role interests me. Coherent's expansion of a state-of-the-art manufacturing cleanroom in its existing 700,000 square-foot facility suggests a scaling challenge for maintaining strict contamination control, which I imagine makes process consistency harder to guarantee. Our research is trying to understand how compliance teams balance rigorous standards with rapid facility growth.
+
+Could I ask you for fifteen minutes later this week or next for a short conversation online?
+
+Best,
+Niharika Ahirekar",
+round3-b,C21,Luis Romero,Router accuracy,pass,"expected follow_up, got follow_up",code,,
+round3-b,C21,Luis Romero,Follow-up format,pass,16-word phrase,code,,
+round3-b,C21,Luis Romero,Grounding (judge),pass,The phrase accurately reflects the call notes without adding unsupported details.,LLM,,
+round3-b,C21,Luis Romero,Quality (judge),pass,"The phrase reads naturally, respectfully highlights a challenge, uses plain language, and is specific enough for the recipient to recognize their own conversation.",LLM,"Hi Luis,
+
+Thank you again for taking the time to speak with me. What you described about equipment maintenance, especially reacting to tool alarms and lack of warning before pump or chiller failures, shaped a lot of how we've approached our research.
+
+We've spent the past few weeks building a solution that speaks directly to that. I'd love 15 minutes to walk you through it and hear your honest reaction as someone who deals with this problem firsthand.
+
+We can be flexible with the schedule. Would either this week or next week work for a short Zoom call?
+
+Thank you for your time,
+Niharika Ahirekar
+Graduate Student
+Rochester Institute of Technology",
+round3-b,C22,Aisha Bello,Router accuracy,pass,"expected first_touch, got first_touch",code,,
+round3-b,C22,Aisha Bello,First-touch compliance,pass,83 words,code,,
+round3-b,C22,Aisha Bello,No wrong-person match,pass,none matched,code,,
+round3-b,C22,Aisha Bello,Grounding (judge),pass,All factual claims in the paragraph are supported by the provided sources.,LLM,,
+round3-b,C22,Aisha Bello,Quality (judge),fail,"Paragraph exceeds 80 words and contains an overly long product list, making it too report‑like rather than a concise, thoughtful note.",LLM,"Hi Aisha,
+
+My name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.
+
+Maintenance supervision is where cleanroom operations get tested most directly, which is why your role interests me. Products include power and signal management, logic, discrete, and custom devices for automotive, communications, computing, consumer, industrial, LED lighting, medical, military/aerospace and power applications; I imagine supporting such a diverse product portfolio creates a cleanroom scheduling challenge, which I'd guess makes balancing equipment uptime and contamination control tricky. Our research is trying to understand how facilities must trade off rapid maintenance turnaround with strict particulate limits.
+
+Could I ask you for fifteen minutes later this week or next for a short conversation online?
+
+Best,
+Niharika Ahirekar",
+round3-b,C23,Derek Lindqvist,Router accuracy,pass,"expected follow_up, got follow_up",code,,
+round3-b,C23,Derek Lindqvist,Follow-up format,pass,20-word phrase,code,,
+round3-b,C23,Derek Lindqvist,Grounding (judge),pass,The phrase accurately reflects the call notes without adding unsupported details.,LLM,,
+round3-b,C23,Derek Lindqvist,Quality (judge),pass,"The phrase reads naturally, respectfully highlights a challenge, uses plain language, and is specific enough for the person to recognize their own conversation.",LLM,"Hi Derek,
+
+Thank you again for taking the time to speak with me. What you described about tool health tracking in a personal spreadsheet, especially the single point of failure when the primary owner is on vacation, shaped a lot of how we've approached our research.
+
+We've spent the past few weeks building a solution that speaks directly to that. I'd love 15 minutes to walk you through it and hear your honest reaction as someone who deals with this problem firsthand.
+
+We can be flexible with the schedule. Would either this week or next week work for a short Zoom call?
+
+Thank you for your time,
+Niharika Ahirekar
+Graduate Student
+Rochester Institute of Technology",
+round3-b,C24,Mei Chen,Router accuracy,pass,"expected first_touch, got first_touch",code,,
+round3-b,C24,Mei Chen,First-touch compliance,pass,68 words,code,,
+round3-b,C24,Mei Chen,No wrong-person match,pass,none matched,code,,
+round3-b,C24,Mei Chen,Grounding (judge),pass,All factual claims in the paragraph are supported by the provided sources.,LLM,,
+round3-b,C24,Mei Chen,Quality (judge),pass,"The paragraph meets all criteria: it reads thoughtfully, references Wolfspeed’s product families, maintains a respectful researcher tone, and is clear, grammatical, and 68 words long.",LLM,"Hi Mei,
+
+My name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.
+
+Equipment maintenance is where cleanroom operations get exercised most directly, which is why your role catches my interest. Wolfspeed's product families include Silicon Carbide materials, power-switching devices and RF devices, which I imagine creates a cleanroom challenge around keeping particle-free environments for high-voltage components. Understanding how you balance strict contamination control with the need for rapid equipment turnaround is exactly the tension our research is trying to understand.
+
+Could I ask you for fifteen minutes later this week or next for a short conversation online?
+
+Best,
+Niharika Ahirekar",
+round3-b,C25,Jonas Weber,Router accuracy,pass,"expected first_touch, got first_touch",code,,
+round3-b,C25,Jonas Weber,First-touch compliance,pass,68 words,code,,
+round3-b,C25,Jonas Weber,No wrong-person match,pass,none matched,code,,
+round3-b,C25,Jonas Weber,Grounding (judge),pass,All factual claims are supported by the provided sources.,LLM,,
+round3-b,C25,Jonas Weber,Quality (judge),pass,"The paragraph meets all criteria: it reads thoughtfully, mentions the 9,500 sq. ft. Nanofab Cleanroom, uses a curious and respectful tone, and is clear, grammatical, and 68 words long.",LLM,"Hi Jonas,
+
+My name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.
+
+Maintenance management is where cleanroom operations get exercised most concretely, which is why your role catches my attention. The lab notes a ""Lab space within the 9,500 sq. ft. Nanofab Cleanroom,"" so I imagine keeping that large environment at particle-free levels creates a constant balancing act between equipment uptime and strict contamination control. Our research is trying to understand how facilities negotiate that trade-off between reliability and cleanliness.
+
+Could I ask you for fifteen minutes later this week or next for a short conversation online?
+
+Best,
+Niharika Ahirekar",
+round3-b,C26,Ethan Park,Router accuracy,pass,"expected follow_up, got follow_up",code,,
+round3-b,C26,Ethan Park,Follow-up format,pass,16-word phrase,code,,
+round3-b,C26,Ethan Park,Grounding (judge),pass,The phrase accurately reflects the notes without adding unsupported details.,LLM,,
+round3-b,C26,Ethan Park,Quality (judge),pass,"The phrase reads naturally, respectfully highlights a challenge, uses plain language, and is specific enough for the person to recognize their own conversation.",LLM,"Hi Ethan,
+
+Thank you again for taking the time to speak with me. What you described about manual logging on paper, especially delayed digital entry and not knowing who reviews the logged data, shaped a lot of how we've approached our research.
+
+We've spent the past few weeks building a solution that speaks directly to that. I'd love 15 minutes to walk you through it and hear your honest reaction as someone who deals with this problem firsthand.
+
+We can be flexible with the schedule. Would either this week or next week work for a short Zoom call?
+
+Thank you for your time,
+Niharika Ahirekar
+Graduate Student
+Rochester Institute of Technology",
+round3-b,C27,Olivia Grant,Router accuracy,pass,"expected first_touch, got first_touch",code,,
+round3-b,C27,Olivia Grant,First-touch compliance,pass,60 words,code,,
+round3-b,C27,Olivia Grant,No wrong-person match,pass,none matched,code,,
+round3-b,C27,Olivia Grant,Grounding (judge),pass,All factual claims in the paragraph are supported by the provided sources.,LLM,,
+round3-b,C27,Olivia Grant,Quality (judge),pass,"The paragraph meets all criteria: it reads thoughtfully, mentions the 23,000 sqm cleanroom detail, uses a curious and respectful tone, and is clear, grammatical, and 60 words long.",LLM,"Hi Olivia,
+
+My name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.
+
+Process engineering is where cleanroom operations get exercised most, which is why the intern role catches my interest. ""The new facility spans a cleanroom space of over 23,000 sqm,"" and I imagine managing that scale creates a balancing act between resource efficiency and strict contamination control. Our research is trying to understand how such trade-offs affect yield and cycle time.
+
+Could I ask you for fifteen minutes later this week or next for a short conversation online?
+
+Best,
+Niharika Ahirekar",
+round3-b,C28,Ryan Moore,Router accuracy,pass,"expected first_touch, got first_touch",code,,
+round3-b,C28,Ryan Moore,First-touch compliance,pass,70 words,code,,
+round3-b,C28,Ryan Moore,No wrong-person match,pass,none matched,code,,
+round3-b,C28,Ryan Moore,Grounding (judge),pass,All factual claims in the paragraph are supported by the provided sources.,LLM,,
+round3-b,C28,Ryan Moore,Quality (judge),pass,"The paragraph meets all criteria: it is thoughtful, mentions Regeneron's mobile cGMP gowning cleanroom with ISO 7, uses a curious and respectful tone, and is clear, grammatical, and 69 words long.",LLM,"Hi Ryan,
+
+My name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.
+
+Lab technician work is where cleanroom operations get exercised most directly, which is why your role catches my interest. Regeneron's mobile cGMP gowning cleanroom that met ISO 7 design parameters suggests a flexible aseptic environment, which I imagine creates a challenge in maintaining consistent contamination control across different locations. Understanding how that trade-off between mobility and control shapes process reliability is exactly the tension our research is trying to understand.
+
+Could I ask you for fifteen minutes later this week or next for a short conversation online?
+
+Best,
+Niharika Ahirekar",
+round3-b,C29,Zoe Adeyemi,Router accuracy,pass,"expected follow_up, got follow_up",code,,
+round3-b,C29,Zoe Adeyemi,Follow-up format,pass,11-word phrase,code,,
+round3-b,C29,Zoe Adeyemi,Grounding (judge),pass,The phrase accurately reflects the call notes without adding unsupported details.,LLM,,
+round3-b,C29,Zoe Adeyemi,Quality (judge),pass,"The phrase reads naturally, respectfully highlights a challenge, uses plain language, and is specific enough for the recipient to recognize the conversation.",LLM,"Hi Zoe,
+
+It was great meeting you at ALD 2026 in Tampa. What you described about contamination in experiments, especially discovering it only after results are returned, shaped a lot of how we've approached our research.
+
+We've spent the past few weeks building a solution that speaks directly to that. I'd love 15 minutes to walk you through it and hear your honest reaction as someone who deals with this problem firsthand.
+
+We can be flexible with the schedule. Would either this week or next week work for a short Zoom call?
+
+Thank you for your time,
+Niharika Ahirekar
+Graduate Student
+Rochester Institute of Technology",
+round3-b,C30,Liam Foster,Router accuracy,pass,"expected first_touch, got first_touch",code,,
+round3-b,C30,Liam Foster,First-touch compliance,pass,64 words,code,,
+round3-b,C30,Liam Foster,No wrong-person match,fail,matched a real person,code,,
+round3-b,C30,Liam Foster,Grounding (judge),pass,All specific claims are supported by the provided sources.,LLM,,
+round3-b,C30,Liam Foster,Quality (judge),pass,"The paragraph meets all criteria: it is thoughtful, mentions Medtronic’s GMP‑compliant cleanroom, is curious and respectful, and is clear and grammatical with 64 words.",LLM,"Hi Liam,
+
+My name is Niharika Ahirekar, a student at Rochester Institute of Technology researching cleanroom operations in industry.
+
+Quality and facilities work is where cleanroom operations get tested most directly, which is why your associate engineer role catches my interest. Medtronic's cleanroom complying to GMP standards suggests a constant battle between maintaining strict sterility and keeping production throughput high, which I imagine creates a delicate yield-vs-speed trade-off. Understanding how that tension shapes process decisions is exactly what our research aims to explore.
+
+Could I ask you for fifteen minutes later this week or next for a short conversation online?
+
+Best,
+Niharika Ahirekar",

@@ -23,6 +23,7 @@ TARGETS = {  # eval -> minimum pass rate (%) to ship
     "Follow-up format": 100,
     "Refuses thin notes": 100,
     "No wrong-person match": 100,
+    "No pasted source text": 95,
     "Grounding (judge)": 95,
     "Quality (judge)": 90,
 }
@@ -73,6 +74,11 @@ def with_retry(fn, *args):
         except Exception as e:
             msg = f"{type(e).__name__}: {str(e)[:400]}"
             low = msg.lower()
+            if "blocked_api_access" in low or "spend limit" in low:
+                import os
+                os.environ["ALLOW_FALLBACK"] = "1"
+                raise RuntimeError("The Groq monthly spend cap was reached, so the run was stopped and nothing was scored. "
+                                   f"Raise the cap in Groq billing settings to continue. Provider message: {msg}") from e
             if not ("429" in msg or "rate limit" in low):
                 raise
             daily = "per day" in low or "(tpd)" in low or "(rpd)" in low
@@ -175,6 +181,8 @@ def run_evals(sender: str = "Niharika Ahirekar", progress=None, quick: bool = Fa
             ok = not missing and not banned and 35 <= words <= 85
             rows.append(row(c, "First-touch compliance", ok,
                             f"{words} words" + (f"; banned: {banned}" if banned else "") + (f"; template changed" if missing else "")))
+            paste = agent.paste_problems(para, res.sources)
+            rows.append(row(c, "No pasted source text", not paste, "; ".join(paste) or "written in own words"))
             # Every sample person is invented, so any 'person found' is a same-name stranger.
             rows.append(row(c, "No wrong-person match", not res.person_found,
                             "matched a real person" if res.person_found else "none matched"))

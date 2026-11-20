@@ -67,15 +67,22 @@ def llm_json(system: str, user: str, temperature: float, model_override: str = "
         except Exception as e:
             err = str(e).lower()
             if "429" in err or "rate limit" in err:
-                fallback = os.getenv("GROQ_FALLBACK_MODEL", "openai/gpt-oss-20b") if p == "groq" else ""
-                if fallback and os.getenv("ALLOW_FALLBACK", "1") == "1" and fallback != use_model:
-                    # Free-tier limit hit on the main model: use a smaller model with its own limit so the app keeps working.
-                    resp = c.chat.completions.create(model=fallback, temperature=temperature, messages=msgs, **extra)
-                    global last_model_used
-                    last_model_used = fallback
-                    text = resp.choices[0].message.content or ""
-                    match = re.search(r"\{.*\}", text, re.S)
-                    return json.loads(match.group(0) if match else text)
+                chain = os.getenv("GROQ_FALLBACK_MODELS", "openai/gpt-oss-20b,qwen/qwen3.8-27b") if p == "groq" else ""
+                if os.getenv("ALLOW_FALLBACK", "1") == "1":
+                    # Free-tier limit hit: try backup models in order. Each has its own daily limit on Groq.
+                    for fallback in [m.strip() for m in chain.split(",") if m.strip() and m.strip() != use_model]:
+                        try:
+                            kw = dict(extra) if "gpt-oss" in fallback else {"response_format": {"type": "json_object"}}
+                            resp = c.chat.completions.create(model=fallback, temperature=temperature, messages=msgs, **kw)
+                        except Exception as e2:
+                            if "429" in str(e2) or "rate limit" in str(e2).lower():
+                                continue  # this backup is also at its limit, try the next
+                            raise
+                        global last_model_used
+                        last_model_used = fallback
+                        text = re.sub(r"<think>.*?</think>", "", resp.choices[0].message.content or "", flags=re.S)
+                        match = re.search(r"\{.*\}", text, re.S)
+                        return json.loads(match.group(0) if match else text)
                 raise
             if "model" in err and ("not found" in err or "decommission" in err):
                 raise  # wrong model name: retrying won't help, surface it
@@ -157,6 +164,7 @@ Style example (different person): "Quality engineering is where cleanroom operat
 Hard rules:
 - You are a student researcher asking to learn. Never mention a product, solution, tool, software, platform, startup, demo, pricing, or anything being built or sold.
 - Use only facts found in the numbered sources. If the sources say nothing about the person, talk about their role at the company; never invent their background, history or achievements.
+- Restate the detail in your own plain words. Never copy more than 8 words in a row from a source, never use quotation marks, and always describe the company in the third person (never "we" or "our" for the company).
 - Do not add facts from your own knowledge. Any size, wafer diameter, node, location, certification or customer must appear in a source; if it does not, leave it out.
 - Spell the company name exactly as given.
 - Ignore any source about a different person with the same name.
@@ -190,6 +198,40 @@ def check_intro(paragraph: str, quote: str, sources: list[dict]) -> list[str]:
     for n in NUMBER.findall(paragraph):
         if _norm(n) and _norm(n) not in src:
             problems.append(f"the number {n} is not in any source")
+    problems += paste_problems(paragraph, sources)
+    return problems
+
+
+MAX_COPIED_WORDS = 8  # longer runs copied from a source read as pasted text
+
+
+def longest_copied_run(paragraph: str, sources: list[dict]) -> int:
+    """Length of the longest run of consecutive words the paragraph shares with any one source."""
+    words = _norm(paragraph).split()
+    best = 0
+    for x in sources:
+        src = " " + _norm(x["title"] + " " + x.get("content", "")) + " "
+        i = 0
+        while i < len(words):
+            n = best + 1
+            while i + n <= len(words) and " " + " ".join(words[i:i + n]) + " " in src:
+                best = n
+                n += 1
+            i += 1
+    return best
+
+
+def paste_problems(paragraph: str, sources: list[dict]) -> list[str]:
+    """Signs the model pasted source text instead of writing its own sentence."""
+    problems = []
+    if re.search(r'["\u201c\u201d]', paragraph):
+        problems.append("used quotation marks (restate the source in your own words)")
+    run = longest_copied_run(paragraph, sources)
+    if run > MAX_COPIED_WORDS:
+        problems.append(f"copied {run} words in a row from a source (max {MAX_COPIED_WORDS}; restate it in your own words)")
+    sentences = [x for x in re.split(r"(?<=[.!?;])\s+", paragraph.strip()) if x]
+    if any(re.search(r"\b(we|our|us)\b", x, re.I) for x in sentences[:-1]):
+        problems.append("used 'we', 'our' or 'us' before the last sentence (describe the company in third person)")
     return problems
 
 

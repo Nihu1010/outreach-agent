@@ -34,7 +34,7 @@ import evals  # noqa: E402
 ss = st.session_state
 
 st.title("Evals")
-st.caption("Every draft the agent writes is scored by 7 checks: 5 exact code checks and 2 LLM judges. "
+st.caption("Every draft the agent writes is scored by 8 checks: 6 exact code checks and 2 LLM judges. "
            "Below are the saved results of every full run on the 30 sample contacts.")
 
 with st.expander("What each eval checks", expanded=False):
@@ -46,6 +46,7 @@ with st.expander("What each eval checks", expanded=False):
 | Follow-up format | Code | AI phrase present, 6-30 words, greeting intact | 100% |
 | Refuses thin notes | Code | Notes too short = no draft, asks for more detail | 100% |
 | No wrong-person match | Code | Sample people are invented, so research must not claim to find them | 100% |
+| No pasted source text | Code | No quotation marks, no more than 8 words copied in a row from a source, company described in third person (added in round 4) | 95% |
 | Grounding | LLM judge | Every company/person fact is in the sources; every follow-up detail is in the notes | 95% |
 | Quality | LLM judge | Reads like a person wrote it, one specific detail, respectful, plain words | 90% |
 """)
@@ -170,5 +171,6 @@ if "eval_df" in ss:
     c2.download_button("Download summary (CSV)", summary.to_csv(index=False),
                        f"eval_summary_{df['version'].iloc[0]}_{stamp}.csv", "text/csv")
     st.info("To add this run to the public results: send the full results CSV to be added to "
-            "data/eval_history with a manifest entry. Judge check: fill 'your_label' with pass/fail for 10 judge "
+            "data/eval_history with a manifest entry.\n\n"
+            "Judge check: fill 'your_label' with pass/fail for 10 judge "
             "rows and count agreement with the judge (8 of 10 or more before judge scores count).")

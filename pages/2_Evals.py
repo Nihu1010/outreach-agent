@@ -74,8 +74,9 @@ if runs:
     st.subheader("Pass rate by run")
     st.dataframe(table, hide_index=True, width="stretch")
     st.caption("Judge setup changed after the baseline (fixed prompts, separate judge model), so compare the "
-               "code-checked rows directly and read judge rows with that in mind. Round 2 was run twice on the same "
-               "code to measure run-to-run variation.")
+               "code-checked rows directly and read judge rows with that in mind. Each column is the first full run "
+               "of that round. Rounds 2 and 3 were also repeated on the same code, and scores moved by up to 10 points "
+               "between runs (see the notes below).")
 
     with st.expander("Notes on each run"):
         for r in runs:

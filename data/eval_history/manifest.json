@@ -7,31 +7,24 @@
   "note": "First scored run. Judges ran on the agent's own model with the original judge prompts."
  },
  {
-  "label": "Round 2 \u00b7 run 1",
+  "label": "Round 2",
   "file": "round2_run1_2026-11-12.csv",
   "date": "2026-11-12",
   "build": "v12",
-  "note": "Name + company person filter, one-detail paragraph, stricter grounding rules. Judges fixed and moved to gpt-oss-20b."
+  "note": "Name + company person filter, one-detail paragraph, stricter grounding rules. Judges fixed and moved to gpt-oss-20b. A repeat run on the same code scored 76% grounding, 83% wrong-person and 93% quality."
  },
  {
-  "label": "Round 2 \u00b7 run 2",
-  "file": "round2_run2_2026-11-15.csv",
-  "date": "2026-11-15",
-  "build": "v12",
-  "note": "Same code as run 1. The gap between the two runs shows run-to-run variation from web search results and model randomness."
- },
- {
-  "label": "Round 3 \u00b7 run a",
-  "file": "round3_run_a_2026-11-20.csv",
-  "date": "2026-11-20",
-  "build": "v17",
-  "note": "Same code as run b. Grounding held up across both runs; reading the drafts showed the model pasting source text, which the quality judge often missed. That led to the round 4 pasted-text check."
- },
- {
-  "label": "Round 3 \u00b7 run b",
+  "label": "Round 3",
   "file": "round3_run_b_2026-11-15.csv",
   "date": "2026-11-15",
   "build": "v17",
-  "note": "Company details must come from a source sentence the model quotes exactly; numbers must appear in the sources; full-name person match; follow-ups retry if they add time words not in the notes."
+  "note": "Company details must come from a source sentence the model quotes exactly; numbers must appear in the sources; full-name person match; follow-ups retry if they add time words not in the notes. A repeat run on the same code scored 97% grounding, 89% wrong-person and 90% quality."
+ },
+ {
+  "label": "Round 4",
+  "file": "round4_run_a_2026-11-20.csv",
+  "date": "2026-11-20",
+  "build": "v22",
+  "note": "Adds a code check against pasted source text (quotation marks, more than 8 copied words, company described as we/our); the agent rewrites until it passes. Two test contacts renamed because their invented names matched real employees."
  }
 ]
